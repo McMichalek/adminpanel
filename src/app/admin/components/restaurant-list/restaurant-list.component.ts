@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AdminService } from '../../services/admin.service';
 import { Restaurant } from '../../../models/restaurant.model';
-import {RouterLink} from '@angular/router';
+import {RouterLink, RouterModule} from '@angular/router';
+import {CommonModule} from '@angular/common';
 
 @Component({
+  standalone: true,
+
+  imports: [CommonModule, RouterModule,RouterLink],
   selector: 'app-restaurant-list',
-  imports: [
-    RouterLink
-  ],
   templateUrl: './restaurant-list.component.html'
 })
 export class RestaurantListComponent implements OnInit {

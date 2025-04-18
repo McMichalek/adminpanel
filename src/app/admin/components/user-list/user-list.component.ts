@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AdminService } from '../../services/admin.service';
 import { User } from '../../../models/user.model';
-import {RouterLink} from '@angular/router';
+import {RouterLink, RouterModule} from '@angular/router';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-user-list',
-  imports: [
-    RouterLink
-  ],
+  standalone: true,
+
+  imports: [CommonModule, RouterModule,RouterLink],
   templateUrl: './user-list.component.html'
 })
 export class UserListComponent implements OnInit {

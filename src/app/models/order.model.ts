@@ -13,4 +13,6 @@ export interface Order {
   dishIds: number[];    // lista identyfikatorów zamówionych dań
   price: number;        // suma cen (zaaktualizowana o promocje)
   state: OrderState;
+  totalPrice: number; // required by template
+  status: string;
 }

@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
+import { AdminHomeComponent } from './components/admin-home/admin-home.component';
 import { RestaurantListComponent } from './components/restaurant-list/restaurant-list.component';
 import { RestaurantFormComponent } from './components/restaurant-form/restaurant-form.component';
 import { DishListComponent } from './components/dish-list/dish-list.component';
@@ -14,7 +14,8 @@ import { OrderFormComponent } from './components/order-form/order-form.component
 import { StockListComponent } from './components/stock-list/stock-list.component';
 import { StockFormComponent } from './components/stock-form/stock-form.component';
 
-const routes: Routes = [
+export const adminRoutes: Routes = [
+  { path: '', component: AdminHomeComponent },
   { path: 'restaurants', component: RestaurantListComponent },
   { path: 'restaurants/new', component: RestaurantFormComponent },
   { path: 'restaurants/:id/edit', component: RestaurantFormComponent },
@@ -32,11 +33,8 @@ const routes: Routes = [
   { path: 'orders/:id/edit', component: OrderFormComponent },
   { path: 'stock', component: StockListComponent },
   { path: 'stock/new', component: StockFormComponent },
-  { path: 'stock/:id/edit', component: StockFormComponent }
+  { path: 'stock/:id/edit', component: StockFormComponent },
+  { path: '**', redirectTo: '' }
 ];
 
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
 export class AdminRoutingModule {}

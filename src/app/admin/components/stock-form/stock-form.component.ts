@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { StockItem } from '../../../models/stock-item.model';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-stock-form',
-  imports: [
-    ReactiveFormsModule
-  ],
+  standalone: true,
+
+  imports: [CommonModule, RouterModule,ReactiveFormsModule],
+
   templateUrl: './stock-form.component.html'
 })
 export class StockFormComponent implements OnInit {

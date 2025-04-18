@@ -2,15 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AdminService } from '../../services/admin.service';
 import { Order } from '../../../models/order.model';
-import {RouterLink} from '@angular/router';
-import {CurrencyPipe} from '@angular/common';
+import {RouterLink, RouterModule} from '@angular/router';
+import {CommonModule, CurrencyPipe} from '@angular/common';
 
 @Component({
   selector: 'app-order-list',
-  imports: [
-    RouterLink,
-    CurrencyPipe
-  ],
+  standalone: true,
+
+  imports: [CommonModule, RouterModule,RouterLink,CurrencyPipe],
   templateUrl: './order-list.component.html'
 })
 export class OrderListComponent implements OnInit {

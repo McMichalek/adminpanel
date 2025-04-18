@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { Promotion } from '../../../models/promotion.model';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-promotion-form',
-  imports: [
-    ReactiveFormsModule
-  ],
+  standalone: true,
+
+  imports: [CommonModule, RouterModule,ReactiveFormsModule],
+
   templateUrl: './promotion-form.component.html'
 })
 export class PromotionFormComponent implements OnInit {

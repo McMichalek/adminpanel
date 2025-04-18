@@ -15,10 +15,26 @@ import { OrderListComponent } from './components/order-list/order-list.component
 import { OrderFormComponent } from './components/order-form/order-form.component';
 import { StockListComponent } from './components/stock-list/stock-list.component';
 import { StockFormComponent } from './components/stock-form/stock-form.component';
+import { AdminHomeComponent } from './components/admin-home/admin-home.component';
 
 @NgModule({
   declarations: [
-    
+    CommonModule,
+    ReactiveFormsModule,
+    AdminRoutingModule,
+    RestaurantListComponent,
+    RestaurantFormComponent,
+    DishListComponent,
+    DishFormComponent,
+    PromotionListComponent,
+    PromotionFormComponent,
+    UserListComponent,
+    UserFormComponent,
+    OrderListComponent,
+    OrderFormComponent,
+    StockListComponent,
+    StockFormComponent,
+    AdminHomeComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +51,8 @@ import { StockFormComponent } from './components/stock-form/stock-form.component
     OrderListComponent,
     OrderFormComponent,
     StockListComponent,
-    StockFormComponent
+    StockFormComponent,
+    AdminHomeComponent
   ]
 })
 export class AdminModule {}

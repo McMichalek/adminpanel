@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AdminService } from '../../services/admin.service';
 import { StockItem } from '../../../models/stock-item.model';
-import {RouterLink} from '@angular/router';
+import {RouterLink, RouterModule} from '@angular/router';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-stock-list',
-  imports: [
-    RouterLink
-  ],
+  standalone: true,
+
+  imports: [CommonModule, RouterModule,RouterLink],
+
   templateUrl: './stock-list.component.html'
 })
 export class StockListComponent implements OnInit {

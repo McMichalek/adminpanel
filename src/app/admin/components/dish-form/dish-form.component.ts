@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { Dish } from '../../../models/dish.model';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-dish-form',
-  imports: [
-    ReactiveFormsModule
-  ],
+  standalone: true,
+
+  imports: [CommonModule, RouterModule,ReactiveFormsModule],
+
   templateUrl: './dish-form.component.html'
 })
 export class DishFormComponent implements OnInit {

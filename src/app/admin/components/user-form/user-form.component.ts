@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { User } from '../../../models/user.model';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-user-form',
-  imports: [
-    ReactiveFormsModule
-  ],
+  standalone: true,
+
+  imports: [CommonModule, RouterModule,ReactiveFormsModule],
+
   templateUrl: './user-form.component.html'
 })
 export class UserFormComponent implements OnInit {
