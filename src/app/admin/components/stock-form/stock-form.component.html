@@ -1,1 +1,25 @@
-<p>stock-form works!</p>
+<h2>{{ editId ? 'Edytuj' : 'Dodaj' }} produkt magazynowy</h2>
+<form [formGroup]="form" (ngSubmit)="save()">
+  <label>
+    Nazwa:
+    <input formControlName="name" />
+  </label><br>
+
+  <label>
+    Ilość:
+    <input type="number" formControlName="quantity" />
+  </label><br>
+
+  <label>
+    Jednostka:
+    <input formControlName="unit" />
+  </label><br>
+
+  <label>
+    ID Restauracji:
+    <input type="number" formControlName="restaurantId" />
+  </label><br>
+
+  <button type="submit" [disabled]="form.invalid">Zapisz</button>
+  <button type="button" (click)="router.navigate(['/admin/stock'])">Anuluj</button>
+</form>

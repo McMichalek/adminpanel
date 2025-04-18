@@ -1,1 +1,25 @@
-<p>promotion-form works!</p>
+<h2>{{ editId ? 'Edytuj' : 'Dodaj' }} promocję</h2>
+<form [formGroup]="form" (ngSubmit)="save()">
+  <label>
+    Tytuł:
+    <input formControlName="title" />
+  </label><br>
+
+  <label>
+    Opis:
+    <textarea formControlName="description"></textarea>
+  </label><br>
+
+  <label>
+    Procent zniżki:
+    <input type="number" formControlName="discountPercentage" />
+  </label><br>
+
+  <label>
+    Aktywna:
+    <input type="checkbox" formControlName="active" />
+  </label><br>
+
+  <button type="submit" [disabled]="form.invalid">Zapisz</button>
+  <button type="button" (click)="router.navigate(['/admin/promotions'])">Anuluj</button>
+</form>

@@ -1,1 +1,21 @@
-<p>stock-list works!</p>
+<h2>Magazyn</h2>
+<button routerLink="/admin/stock/new">Dodaj</button>
+<table>
+  <tr>
+    <th>Nazwa</th>
+    <th>Ilość</th>
+    <th>Jednostka</th>
+    <th>ID Restauracji</th>
+    <th>Akcje</th>
+  </tr>
+  <tr *ngFor="let s of (stock$ | async)">
+    <td>{{ s.name }}</td>
+    <td>{{ s.quantity }}</td>
+    <td>{{ s.unit }}</td>
+    <td>{{ s.restaurantId }}</td>
+    <td>
+      <button [routerLink]="['/admin/stock', s.id, 'edit']">Edytuj</button>
+      <button (click)="delete(s.id)">Usuń</button>
+    </td>
+  </tr>
+</table>

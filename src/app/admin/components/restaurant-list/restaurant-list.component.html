@@ -1,7 +1,12 @@
 <h2>Restauracje</h2>
 <button routerLink="/admin/restaurants/new">Dodaj</button>
 <table>
-  <tr><th>Nazwa</th><th>Adres</th><th>Godziny</th><th>Akcje</th></tr>
+  <tr>
+    <th>Nazwa</th>
+    <th>Adres</th>
+    <th>Godziny</th>
+    <th>Akcje</th>
+  </tr>
   <tr *ngFor="let r of (restaurants$ | async)">
     <td>{{ r.name }}</td>
     <td>{{ r.address }}</td>

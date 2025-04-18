@@ -1,1 +1,20 @@
-<p>user-form works!</p>
+<h2>{{ editId ? 'Edytuj' : 'Dodaj' }} użytkownika</h2>
+<form [formGroup]="form" (ngSubmit)="save()">
+  <label>
+    Imię i nazwisko:
+    <input formControlName="name" />
+  </label><br>
+
+  <label>
+    E-mail:
+    <input formControlName="email" type="email" />
+  </label><br>
+
+  <label>
+    Rola:
+    <input formControlName="role" />
+  </label><br>
+
+  <button type="submit" [disabled]="form.invalid">Zapisz</button>
+  <button type="button" (click)="router.navigate(['/admin/users'])">Anuluj</button>
+</form>

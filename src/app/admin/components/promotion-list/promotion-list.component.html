@@ -1,1 +1,21 @@
-<p>promotion-list works!</p>
+<h2>Promocje</h2>
+<button routerLink="/admin/promotions/new">Dodaj</button>
+<table>
+  <tr>
+    <th>Tytuł</th>
+    <th>Opis</th>
+    <th>Procent zniżki</th>
+    <th>Aktywna</th>
+    <th>Akcje</th>
+  </tr>
+  <tr *ngFor="let p of (promotions$ | async)">
+    <td>{{ p.title }}</td>
+    <td>{{ p.description }}</td>
+    <td>{{ p.discountPercentage }}%</td>
+    <td>{{ p.active ? 'Tak' : 'Nie' }}</td>
+    <td>
+      <button [routerLink]="['/admin/promotions', p.id, 'edit']">Edytuj</button>
+      <button (click)="delete(p.id)">Usuń</button>
+    </td>
+  </tr>
+</table>

@@ -18,6 +18,12 @@ import { StockFormComponent } from './components/stock-form/stock-form.component
 
 @NgModule({
   declarations: [
+    
+  ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AdminRoutingModule,
     RestaurantListComponent,
     RestaurantFormComponent,
     DishListComponent,
@@ -30,11 +36,6 @@ import { StockFormComponent } from './components/stock-form/stock-form.component
     OrderFormComponent,
     StockListComponent,
     StockFormComponent
-  ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AdminRoutingModule
   ]
 })
 export class AdminModule {}

@@ -1,1 +1,19 @@
-<p>user-list works!</p>
+<h2>Użytkownicy</h2>
+<button routerLink="/admin/users/new">Dodaj</button>
+<table>
+  <tr>
+    <th>Imię i nazwisko</th>
+    <th>E-mail</th>
+    <th>Rola</th>
+    <th>Akcje</th>
+  </tr>
+  <tr *ngFor="let u of (users$ | async)">
+    <td>{{ u.name }}</td>
+    <td>{{ u.email }}</td>
+    <td>{{ u.role }}</td>
+    <td>
+      <button [routerLink]="['/admin/users', u.id, 'edit']">Edytuj</button>
+      <button (click)="delete(u.id)">Usuń</button>
+    </td>
+  </tr>
+</table>

@@ -1,11 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AdminService } from '../../services/admin.service';
+import { StockItem } from '../../../models/stock-item.model';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-stock-list',
-  standalone: false,
-  templateUrl: './stock-list.component.html',
-  styleUrl: './stock-list.component.css'
+  imports: [
+    RouterLink
+  ],
+  templateUrl: './stock-list.component.html'
 })
-export class StockListComponent {
+export class StockListComponent implements OnInit {
+  stock$!: Observable<StockItem[]>;
 
+  constructor(private admin: AdminService) {}
+
+  ngOnInit(): void {
+    this.stock$ = this.admin.getStock();
+  }
+
+  delete(id: number): void {
+    this.admin.deleteStock(id);
+  }
 }

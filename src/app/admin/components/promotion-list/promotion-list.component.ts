@@ -1,11 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AdminService } from '../../services/admin.service';
+import { Promotion } from '../../../models/promotion.model';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-promotion-list',
-  standalone: false,
-  templateUrl: './promotion-list.component.html',
-  styleUrl: './promotion-list.component.css'
+  imports: [
+    RouterLink
+  ],
+  templateUrl: './promotion-list.component.html'
 })
-export class PromotionListComponent {
+export class PromotionListComponent implements OnInit {
+  promotions$!: Observable<Promotion[]>;
 
+  constructor(private admin: AdminService) {}
+
+  ngOnInit(): void {
+    this.promotions$ = this.admin.getPromotions();
+  }
+
+  delete(id: number): void {
+    this.admin.deletePromotion(id);
+  }
 }

@@ -1,1 +1,25 @@
-<p>order-form works!</p>
+<h2>{{ editId ? 'Edytuj' : 'Dodaj' }} zamówienie</h2>
+<form [formGroup]="form" (ngSubmit)="save()">
+  <label>
+    ID Użytkownika:
+    <input type="number" formControlName="userId" />
+  </label><br>
+
+  <label>
+    ID Dania (lista, np. [1,2,3]):
+    <input formControlName="dishIds" />
+  </label><br>
+
+  <label>
+    Cena całkowita:
+    <input type="number" formControlName="totalPrice" />
+  </label><br>
+
+  <label>
+    Status:
+    <input formControlName="status" />
+  </label><br>
+
+  <button type="submit" [disabled]="form.invalid">Zapisz</button>
+  <button type="button" (click)="router.navigate(['/admin/orders'])">Anuluj</button>
+</form>
