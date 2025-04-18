@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import { AdminRoutingModule } from './admin-routing.module';
+
 import { RestaurantListComponent } from './components/restaurant-list/restaurant-list.component';
 import { RestaurantFormComponent } from './components/restaurant-form/restaurant-form.component';
 import { DishListComponent } from './components/dish-list/dish-list.component';
@@ -11,10 +12,9 @@ import { PromotionFormComponent } from './components/promotion-form/promotion-fo
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { OrderListComponent } from './components/order-list/order-list.component';
-import { StockListComponent } from './components/stock-list/stock-list.component';
 import { OrderFormComponent } from './components/order-form/order-form.component';
+import { StockListComponent } from './components/stock-list/stock-list.component';
 import { StockFormComponent } from './components/stock-form/stock-form.component';
-
 
 @NgModule({
   declarations: [
@@ -27,13 +27,14 @@ import { StockFormComponent } from './components/stock-form/stock-form.component
     UserListComponent,
     UserFormComponent,
     OrderListComponent,
-    StockListComponent,
     OrderFormComponent,
+    StockListComponent,
     StockFormComponent
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     AdminRoutingModule
   ]
 })
-export class AdminModule { }
+export class AdminModule {}

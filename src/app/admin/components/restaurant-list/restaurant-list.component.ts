@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AdminService } from '../../services/admin.service';
+import { Restaurant } from '../../../models/restaurant.model';
 
 @Component({
   selector: 'app-restaurant-list',
-  standalone: false,
-  templateUrl: './restaurant-list.component.html',
-  styleUrl: './restaurant-list.component.css'
+  templateUrl: './restaurant-list.component.html'
 })
-export class RestaurantListComponent {
-
+export class RestaurantListComponent implements OnInit {
+  restaurants$!: Observable<Restaurant[]>;
+  constructor(private admin: AdminService) {}
+  ngOnInit() { this.restaurants$ = this.admin.getRestaurants(); }
+  delete(id: number) { this.admin.deleteRestaurant(id); }
 }
