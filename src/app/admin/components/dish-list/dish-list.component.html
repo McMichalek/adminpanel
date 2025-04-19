@@ -1,12 +1,22 @@
 <h2>Dania</h2>
 <button routerLink="/admin/dishes/new">Dodaj</button>
 <table>
-  <tr><th>Nazwa</th><th>Opis</th><th>Cena</th><th>Restauracja ID</th><th>Dostępność</th><th>Akcje</th></tr>
+  <tr>
+    <th>Restauracja ID</th>
+    <th>Danie ID</th>
+    <th>Nazwa</th>
+    <th>Opis</th>
+    <th>Cena</th>
+    <th>Dostępność</th>
+    <th>Akcje</th>
+  </tr>
   <tr *ngFor="let d of (dishes$ | async)">
+    <td>{{ d.restaurantId }}</td>
+    <td>{{ d.id }}</td>
     <td>{{ d.name }}</td>
     <td>{{ d.description }}</td>
     <td>{{ d.price | currency:'PLN' }}</td>
-    <td>{{ d.restaurantId }}</td>
+
     <td>{{ d.isAvailable ? 'Tak' : 'Nie' }}</td>
     <td>
       <button [routerLink]="['/admin/dishes', d.id, 'edit']">Edytuj</button>

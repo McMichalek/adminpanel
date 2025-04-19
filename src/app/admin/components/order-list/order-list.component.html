@@ -1,15 +1,21 @@
 <h2>Zamówienia</h2>
 <button routerLink="/admin/orders/new">Dodaj</button>
+
 <table>
   <tr>
+
     <th>ID Użytkownika</th>
+    <th>ID Restuaracji </th>
     <th>ID Dania (lista)</th>
     <th>Cena całkowita</th>
     <th>Status</th>
     <th>Akcje</th>
   </tr>
   <tr *ngFor="let o of (orders$ | async)">
+
     <td>{{ o.userId }}</td>
+    <td>{{ o.restaurantId }}</td>
+
     <td>{{ o.dishIds.join(', ') }}</td>
     <td>{{ o.totalPrice | currency:'PLN' }}</td>
     <td>{{ o.status }}</td>

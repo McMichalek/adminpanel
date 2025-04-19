@@ -1,24 +1,35 @@
-<h2>{{ editId ? 'Edytuj' : 'Dodaj' }} produkt magazynowy</h2>
+<h2>{{ editId ? 'Edytuj' : 'Dodaj' }} pozycję magazynową</h2>
 <form [formGroup]="form" (ngSubmit)="save()">
   <label>
-    Nazwa:
-    <input formControlName="name" />
-  </label><br>
+    Restauracja:<br />
+    <select formControlName="restaurantId">
+      <option [value]="null" disabled>-- wybierz restaurację --</option>
+      <option *ngFor="let r of (restaurants$ | async)" [value]="r.id">{{ r.name }}</option>
+    </select>
+  </label><br /><br />
 
   <label>
-    Ilość:
-    <input type="number" formControlName="quantity" />
-  </label><br>
+    Danie:<br />
+    <select formControlName="dishId">
+      <option [value]="null" disabled>-- wybierz danie --</option>
+      <option *ngFor="let d of (filteredDishes$ | async)" [value]="d.id">{{ d.name }}</option>
+    </select>
+  </label><br /><br />
 
   <label>
-    Jednostka:
-    <input formControlName="unit" />
-  </label><br>
+    Nazwa:<br />
+    <input type="text" formControlName="name">
+  </label><br /><br />
 
   <label>
-    ID Restauracji:
-    <input type="number" formControlName="restaurantId" />
-  </label><br>
+    Jednostka:<br />
+    <input type="text" formControlName="unit">
+  </label><br /><br />
+
+  <label>
+    Ilość:<br />
+    <input type="number" formControlName="quantity">
+  </label><br /><br />
 
   <button type="submit" [disabled]="form.invalid">Zapisz</button>
   <button type="button" (click)="router.navigate(['/admin/stock'])">Anuluj</button>

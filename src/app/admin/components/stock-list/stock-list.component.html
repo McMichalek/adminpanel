@@ -1,18 +1,39 @@
 <h2>Magazyn</h2>
-<button routerLink="/admin/stock/new">Dodaj</button>
+<button [routerLink]="['/admin/stock/new']">Dodaj</button><br /><br />
+
+<label>
+  Filtruj po restauracji:
+  <select [(ngModel)]="selectedRestaurantId" (change)="filter()">
+    <option [value]="null">-- Wszystkie --</option>
+    <option *ngFor="let r of restaurants" [value]="r.id">{{ r.name }}</option>
+  </select>
+</label>
+
+<label>
+  Danie:
+  <select [(ngModel)]="selectedDishId" (change)="filter()">
+    <option [value]="null">-- Wszystkie --</option>
+    <option *ngFor="let d of dishes" [value]="d.id">{{ d.name }}</option>
+  </select>
+</label><br /><br />
+
 <table>
   <tr>
+    <th>ID</th>
+    <th>Restauracja</th>
+    <th>Danie</th>
     <th>Nazwa</th>
-    <th>Ilość</th>
     <th>Jednostka</th>
-    <th>ID Restauracji</th>
+    <th>Ilość</th>
     <th>Akcje</th>
   </tr>
-  <tr *ngFor="let s of (stock$ | async)">
+  <tr *ngFor="let s of filteredStock">
+    <td>{{ s.id }}</td>
+    <td>{{ getRestaurantName(s.restaurantId) }}</td>
+    <td>{{ getDishName(s.dishId) }}</td>
     <td>{{ s.name }}</td>
-    <td>{{ s.quantity }}</td>
     <td>{{ s.unit }}</td>
-    <td>{{ s.restaurantId }}</td>
+    <td>{{ s.quantity }}</td>
     <td>
       <button [routerLink]="['/admin/stock', s.id, 'edit']">Edytuj</button>
       <button (click)="delete(s.id)">Usuń</button>

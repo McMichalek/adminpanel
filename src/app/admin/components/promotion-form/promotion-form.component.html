@@ -1,24 +1,50 @@
 <h2>{{ editId ? 'Edytuj' : 'Dodaj' }} promocję</h2>
+
 <form [formGroup]="form" (ngSubmit)="save()">
   <label>
-    Tytuł:
-    <input formControlName="title" />
-  </label><br>
+    Restauracja:<br />
+    <select formControlName="restaurantId">
+      <option [value]="null" disabled>-- wybierz restaurację --</option>
+      <option *ngFor="let r of (restaurants$ | async)" [value]="r.id">{{ r.name }}</option>
+    </select>
+  </label><br /><br />
+  <label>
+    Danie:<br />
+    <select formControlName="dishId">
+      <option [value]="null" disabled>-- wybierz danie --</option>
+      <option *ngFor="let d of filteredDishes" [value]="d.id">{{ d.name }}</option>
+    </select>
+  </label><br /><br />
 
   <label>
-    Opis:
+    Nowa cena:<br />
+    <input type="number" formControlName="newPrice" min="0.01" step="0.01" />
+  </label><br />
+  <div *ngIf="form.get('newPrice')?.invalid && form.get('newPrice')?.touched" style="color: red;">
+    Cena musi być większa od zera.
+  </div><br />
+
+  <label>
+    Tytuł:<br />
+    <input type="text" formControlName="title" />
+  </label><br /><br />
+
+  <label>
+    Opis:<br />
     <textarea formControlName="description"></textarea>
-  </label><br>
+  </label><br /><br />
 
   <label>
-    Procent zniżki:
-    <input type="number" formControlName="discountPercentage" />
-  </label><br>
+    Rabat (%):<br />
+    <input type="number" formControlName="discountPercentage" min="1" max="100" />
+  </label><br />
+  <div *ngIf="form.get('discountPercentage')?.invalid && form.get('discountPercentage')?.touched" style="color: red;">
+    Rabat musi być z zakresu 1–100%.
+  </div><br />
 
   <label>
-    Aktywna:
-    <input type="checkbox" formControlName="active" />
-  </label><br>
+    Aktywna: <input type="checkbox" formControlName="active" />
+  </label><br /><br />
 
   <button type="submit" [disabled]="form.invalid">Zapisz</button>
   <button type="button" (click)="router.navigate(['/admin/promotions'])">Anuluj</button>

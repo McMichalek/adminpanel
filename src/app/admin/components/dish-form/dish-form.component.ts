@@ -23,8 +23,11 @@ export class DishFormComponent implements OnInit {
     private route: ActivatedRoute,
     protected router: Router
   ) {}
+  // @ts-ignore
 
+  restaurants$!: Observable<Restaurant[]>;
   ngOnInit(): void {
+    this.restaurants$ = this.admin.getRestaurants();
     this.form = this.fb.group({
       name: ['', Validators.required],
       description: [''],
@@ -47,7 +50,7 @@ export class DishFormComponent implements OnInit {
   }
 
   save(): void {
-    const data: Dish = { id: this.editId || Date.now(), ...this.form.value };
+    const data: Dish = { ...this.form.value };
     if (this.editId) {
       this.admin.updateDish(data);
     } else {
