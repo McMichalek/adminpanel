@@ -1,26 +1,35 @@
-<h2>Dania</h2>
-<button routerLink="/admin/dishes/new">Dodaj</button>
-<table>
-  <tr>
-    <th>Restauracja ID</th>
-    <th>Danie ID</th>
-    <th>Nazwa</th>
-    <th>Opis</th>
-    <th>Cena</th>
-    <th>Dostępność</th>
-    <th>Akcje</th>
-  </tr>
-  <tr *ngFor="let d of (dishes$ | async)">
-    <td>{{ d.restaurantId }}</td>
-    <td>{{ d.id }}</td>
-    <td>{{ d.name }}</td>
-    <td>{{ d.description }}</td>
-    <td>{{ d.price | currency:'PLN' }}</td>
+<div class="dish-list">
+  <div class="header">
+    <button class="btn-back" routerLink="/admin">← Wstecz</button>
+    <h2>Dania</h2>
+    <button class="btn-add" routerLink="/admin/dishes/new">+ Dodaj</button>
+  </div>
 
-    <td>{{ d.isAvailable ? 'Tak' : 'Nie' }}</td>
-    <td>
-      <button [routerLink]="['/admin/dishes', d.id, 'edit']">Edytuj</button>
-      <button (click)="delete(d.id)">Usuń</button>
-    </td>
-  </tr>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>Restauracja ID</th>
+        <th>Danie ID</th>
+        <th>Nazwa</th>
+        <th>Opis</th>
+        <th>Cena</th>
+        <th>Dostępność</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of (dishes$ | async)">
+        <td>{{ d.restaurantId }}</td>
+        <td>{{ d.id }}</td>
+        <td>{{ d.name }}</td>
+        <td>{{ d.description }}</td>
+        <td>{{ d.price | currency:'PLN' }}</td>
+        <td>{{ d.isAvailable ? 'Tak' : 'Nie' }}</td>
+        <td class="actions">
+          <button class="btn-edit" [routerLink]="['/admin/dishes', d.id, 'edit']">Edytuj</button>
+          <button class="btn-delete" (click)="delete(d.id)">Usuń</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

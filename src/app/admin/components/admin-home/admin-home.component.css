@@ -1,0 +1,54 @@
+:host {
+    display: block;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    color: #333;
+    min-height: 100vh;
+  }
+  
+  .admin-header {
+    background-color: #c62828; /* intensywna czerwień */
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .admin-header h1 {
+    margin: 0;
+    font-size: 2rem;
+  }
+  
+  .admin-nav {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  
+  .admin-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .admin-nav li {
+    margin: 15px 0;
+  }
+  
+  .admin-nav a {
+    display: block;
+    text-decoration: none;
+    background-color: #fce4ec;
+    color: #c62828;
+    font-weight: bold;
+    padding: 15px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-nav a:hover {
+    background-color: #f8bbd0;
+    transform: translateY(-2px);
+  }
+  

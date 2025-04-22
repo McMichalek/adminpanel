@@ -11,7 +11,9 @@ import {CommonModule} from '@angular/common';
 
   imports: [CommonModule, RouterModule,ReactiveFormsModule],
 
-  templateUrl: './dish-form.component.html'
+  templateUrl: './dish-form.component.html',
+  styleUrls: ['./dish-form.component.css']
+
 })
 export class DishFormComponent implements OnInit {
   form!: FormGroup;

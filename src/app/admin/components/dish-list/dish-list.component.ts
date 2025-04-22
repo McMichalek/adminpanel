@@ -8,10 +8,11 @@ import {CommonModule, CurrencyPipe} from '@angular/common';
 @Component({
   selector: 'app-dish-list',
   standalone: true,
-
-  imports: [CommonModule, RouterModule,RouterLink,CurrencyPipe],
-  templateUrl: './dish-list.component.html'
+  templateUrl: './dish-list.component.html',
+  styleUrls: ['./dish-list.component.css'],
+  imports: [CommonModule, RouterModule, RouterLink, CurrencyPipe]
 })
+
 export class DishListComponent implements OnInit {
   dishes$!: Observable<Dish[]>;
 
