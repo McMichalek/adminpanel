@@ -2,12 +2,14 @@
 <button routerLink="/admin/users/new">Dodaj</button>
 <table>
   <tr>
+    <th>ID</th>
     <th>Imię i nazwisko</th>
     <th>E-mail</th>
     <th>Rola</th>
     <th>Akcje</th>
   </tr>
   <tr *ngFor="let u of (users$ | async)">
+    <td>{{ u.id }}</td>
     <td>{{ u.name }}</td>
     <td>{{ u.email }}</td>
     <td>{{ u.role }}</td>

@@ -1,19 +1,24 @@
 <h2>{{ editId ? 'Edytuj' : 'Dodaj' }} użytkownika</h2>
+
 <form [formGroup]="form" (ngSubmit)="save()">
   <label>
-    Imię i nazwisko:
-    <input formControlName="name" />
-  </label><br>
+    Imię i nazwisko:<br />
+    <input type="text" formControlName="name" />
+  </label><br /><br />
 
   <label>
-    E-mail:
-    <input formControlName="email" type="email" />
-  </label><br>
+    Email:<br />
+    <input type="email" formControlName="email" />
+  </label><br /><br />
 
   <label>
-    Rola:
-    <input formControlName="role" />
-  </label><br>
+    Rola:<br />
+    <select formControlName="role">
+      <option value="admin">Administrator</option>
+      <option value="worker">Pracownik</option>
+      <option value="customer">Użytkownik</option>
+    </select>
+  </label><br /><br />
 
   <button type="submit" [disabled]="form.invalid">Zapisz</button>
   <button type="button" (click)="router.navigate(['/admin/users'])">Anuluj</button>
