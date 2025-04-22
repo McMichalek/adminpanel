@@ -10,7 +10,8 @@ import { Observable } from 'rxjs';
   selector: 'app-restaurant-form',
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
-  templateUrl: './restaurant-form.component.html'
+  templateUrl: './restaurant-form.component.html',
+  styleUrls: ['./restaurant-form.component.css'],
 })
 export class RestaurantFormComponent implements OnInit {
   form!: FormGroup;

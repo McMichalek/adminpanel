@@ -14,7 +14,8 @@ import {Restaurant} from '../../../models/restaurant.model';
 
   imports: [CommonModule, RouterModule,ReactiveFormsModule],
 
-  templateUrl: './promotion-form.component.html'
+  templateUrl: './promotion-form.component.html',
+  styleUrls: ['./promotion-form.component.css'],
 })
 export class PromotionFormComponent implements OnInit {
   form!: FormGroup;

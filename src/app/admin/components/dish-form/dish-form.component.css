@@ -7,10 +7,13 @@
   }
   
   .form-container {
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    margin: 40px auto;
+    font-family: Arial, sans-serif;
+    background-color: #fff; 
+    border-radius: 12px;    
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    padding: 30px;  
   }
   
   h2 {

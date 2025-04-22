@@ -10,6 +10,7 @@ import {RouterModule} from '@angular/router';
 @Component({
   selector: 'app-promotion-list',
   templateUrl: './promotion-list.component.html',
+  styleUrls: ['./promotion-list.component.css'],
   standalone: true,
   imports: [CommonModule, RouterModule],
 })

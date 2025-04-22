@@ -1,32 +1,37 @@
-<h2>Promocje</h2>
-<button routerLink="/admin/promotions/new">Dodaj</button>
+<div class="promotion-list">
+  <div class="header">
+    <button class="btn-back" routerLink="/admin">← Wstecz</button>
+    <h2>Promocje</h2>
+    <button class="btn-add" routerLink="/admin/promotions/new">+ Dodaj</button>
+  </div>
 
-<table>
-  <thead>
-  <tr>
-    <th>Tytuł</th>
-    <th>Opis</th>
-    <th>Cena promocyjna</th>
-    <th>% Zniżki</th>
-    <th>Danie</th>
-    <th>Restauracja</th>
-    <th>Aktywna</th>
-    <th>Akcje</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let p of (promotions$ | async)">
-    <td>{{ p.title }}</td>
-    <td>{{ p.description }}</td>
-    <td>{{ p.newPrice | currency:'PLN' }}</td>
-    <td>{{ p.discountPercentage }}%</td>
-    <td>{{ getDishName(p.dishId) }}</td>
-    <td>{{ getRestaurantName(p.restaurantId) }}</td>
-    <td>{{ p.active ? 'Tak' : 'Nie' }}</td>
-    <td>
-      <button [routerLink]="['/admin/promotions', p.id, 'edit']">Edytuj</button>
-      <button (click)="delete(p.id)">Usuń</button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>Tytuł</th>
+        <th>Opis</th>
+        <th>Cena promocyjna</th>
+        <th>% Zniżki</th>
+        <th>Danie</th>
+        <th>Restauracja</th>
+        <th>Aktywna</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of (promotions$ | async)">
+        <td>{{ p.title }}</td>
+        <td>{{ p.description }}</td>
+        <td>{{ p.newPrice | currency:'PLN' }}</td>
+        <td>{{ p.discountPercentage }}%</td>
+        <td>{{ getDishName(p.dishId) }}</td>
+        <td>{{ getRestaurantName(p.restaurantId) }}</td>
+        <td>{{ p.active ? 'Tak' : 'Nie' }}</td>
+        <td class="actions">
+          <button class="btn-edit" [routerLink]="['/admin/promotions', p.id, 'edit']">Edytuj</button>
+          <button class="btn-delete" (click)="delete(p.id)">Usuń</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

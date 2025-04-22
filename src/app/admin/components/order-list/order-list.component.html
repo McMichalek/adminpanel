@@ -1,27 +1,33 @@
-<h2>Zamówienia</h2>
-<button routerLink="/admin/orders/new">Dodaj</button>
+<div class="order-list">
+  <div class="header">
+    <button class="btn-back" routerLink="/admin">← Wstecz</button>
+    <h2>Zamówienia</h2>
+    <button class="btn-add" routerLink="/admin/orders/new">+ Dodaj</button>
+  </div>
 
-<table>
-  <tr>
-
-    <th>ID Użytkownika</th>
-    <th>ID Restuaracji </th>
-    <th>ID Dania (lista)</th>
-    <th>Cena całkowita</th>
-    <th>Status</th>
-    <th>Akcje</th>
-  </tr>
-  <tr *ngFor="let o of (orders$ | async)">
-
-    <td>{{ o.userId }}</td>
-    <td>{{ o.restaurantId }}</td>
-
-    <td>{{ o.dishIds.join(', ') }}</td>
-    <td>{{ o.totalPrice | currency:'PLN' }}</td>
-    <td>{{ o.status }}</td>
-    <td>
-      <button [routerLink]="['/admin/orders', o.id, 'edit']">Edytuj</button>
-      <button (click)="delete(o.id)">Usuń</button>
-    </td>
-  </tr>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>Użytkownik</th>
+        <th>ID restauracji</th>
+        <th>Dania</th>
+        <th>Cena całkowita</th>
+        <th>Status</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of (orders$ | async)">
+        <td>{{ o.userName }}</td>
+        <td>{{ o.restaurantId }}</td>
+        <td>{{ o.dishNames.join(', ') }}</td>
+        <td>{{ o.totalPrice | currency:'PLN' }}</td>
+        <td>{{ o.status }}</td>
+        <td class="actions">
+          <button class="btn-edit" [routerLink]="['/admin/orders', o.id, 'edit']">Edytuj</button>
+          <button class="btn-delete" (click)="delete(o.id)">Usuń</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

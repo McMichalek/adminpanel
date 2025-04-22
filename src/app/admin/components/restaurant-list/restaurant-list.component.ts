@@ -8,7 +8,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-restaurant-list',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './restaurant-list.component.html'
+  templateUrl: './restaurant-list.component.html',
+  styleUrls: ['./restaurant-list.component.css']
 })
 export class RestaurantListComponent implements OnInit {
   restaurants: Restaurant[] = [];

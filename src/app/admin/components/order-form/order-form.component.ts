@@ -14,7 +14,8 @@ import {Promotion} from '../../../models/promotion.model';
   selector: 'app-order-form',
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
-  templateUrl: './order-form.component.html'
+  templateUrl: './order-form.component.html',
+  styleUrls: ['./order-form.component.css']
 })
 export class OrderFormComponent implements OnInit {
   form!: FormGroup;

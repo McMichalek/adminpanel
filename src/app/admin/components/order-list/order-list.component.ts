@@ -16,7 +16,8 @@ import {RouterLink} from '@angular/router';
     RouterLink,
     CommonModule,
   ],
-  templateUrl: './order-list.component.html'
+  templateUrl: './order-list.component.html',
+  styleUrls: ['./order-list.component.css']
 })
 export class OrderListComponent implements OnInit {
   orders$!: Observable<(Order & { userName: string, dishNames: string[] })[]>;
