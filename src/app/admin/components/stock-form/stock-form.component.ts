@@ -13,7 +13,8 @@ import { map } from 'rxjs/operators';
   selector: 'app-stock-form',
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
-  templateUrl: './stock-form.component.html'
+  templateUrl: './stock-form.component.html',
+  styleUrls: ['./stock-form.component.css']
 })
 export class StockFormComponent implements OnInit {
   form!: FormGroup;

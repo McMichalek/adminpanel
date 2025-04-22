@@ -10,7 +10,8 @@ import {CommonModule} from '@angular/common';
   standalone: true,
 
   imports: [CommonModule, RouterModule,RouterLink],
-  templateUrl: './user-list.component.html'
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
   users$!: Observable<User[]>;

@@ -1,36 +1,44 @@
-<h2>{{ editId ? 'Edytuj' : 'Dodaj' }} pozycję magazynową</h2>
-<form [formGroup]="form" (ngSubmit)="save()">
-  <label>
-    Restauracja:<br />
-    <select formControlName="restaurantId">
-      <option [value]="null" disabled>-- wybierz restaurację --</option>
-      <option *ngFor="let r of (restaurants$ | async)" [value]="r.id">{{ r.name }}</option>
-    </select>
-  </label><br /><br />
+<div class="stock-form">
+  <div class="header">
+    <h2>{{ editId ? 'Edytuj' : 'Dodaj' }} pozycję magazynową</h2>
+  </div>
 
-  <label>
-    Danie:<br />
-    <select formControlName="dishId">
-      <option [value]="null" disabled>-- wybierz danie --</option>
-      <option *ngFor="let d of (filteredDishes$ | async)" [value]="d.id">{{ d.name }}</option>
-    </select>
-  </label><br /><br />
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <label>
+      Restauracja:
+      <select formControlName="restaurantId">
+        <option [value]="null" disabled>-- wybierz restaurację --</option>
+        <option *ngFor="let r of (restaurants$ | async)" [value]="r.id">{{ r.name }}</option>
+      </select>
+    </label>
 
-  <label>
-    Nazwa:<br />
-    <input type="text" formControlName="name">
-  </label><br /><br />
+    <label>
+      Danie:
+      <select formControlName="dishId">
+        <option [value]="null" disabled>-- wybierz danie --</option>
+        <option *ngFor="let d of (filteredDishes$ | async)" [value]="d.id">{{ d.name }}</option>
+      </select>
+    </label>
 
-  <label>
-    Jednostka:<br />
-    <input type="text" formControlName="unit">
-  </label><br /><br />
+    <label>
+      Nazwa:
+      <input type="text" formControlName="name" />
+    </label>
 
-  <label>
-    Ilość:<br />
-    <input type="number" formControlName="quantity">
-  </label><br /><br />
+    <label>
+      Jednostka:
+      <input type="text" formControlName="unit" />
+    </label>
 
-  <button type="submit" [disabled]="form.invalid">Zapisz</button>
-  <button type="button" (click)="router.navigate(['/admin/stock'])">Anuluj</button>
-</form>
+    <label>
+      Ilość:
+      <input type="number" formControlName="quantity" />
+    </label>
+
+    <!-- Wyrównanie przycisków do prawej -->
+    <div class="actions">
+      <button type="submit" [disabled]="form.invalid" class="btn-primary">Zapisz</button>
+      <button type="button" class="btn-secondary" (click)="router.navigate(['/admin/stock'])">Anuluj</button>
+    </div>
+  </form>
+</div>

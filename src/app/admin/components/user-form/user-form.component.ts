@@ -9,7 +9,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-user-form',
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
-  templateUrl: './user-form.component.html'
+  templateUrl: './user-form.component.html',
+  styleUrls: ['./user-form.component.css']
 })
 export class UserFormComponent implements OnInit {
   form!: FormGroup;

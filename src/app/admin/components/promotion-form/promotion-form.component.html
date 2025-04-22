@@ -1,7 +1,5 @@
 <div class="promotion-form">
-  <div class="header">
-    <h2>{{ editId ? 'Edytuj' : 'Dodaj' }} promocję</h2>
-  </div>
+  <h2>{{ editId ? 'Edytuj' : 'Dodaj' }} promocję</h2>
 
   <form [formGroup]="form" (ngSubmit)="save()">
     <div class="form-group">
@@ -47,15 +45,13 @@
     </div>
 
     <div class="form-group checkbox">
-      <label>
-        <input type="checkbox" formControlName="active" />
-        Promocja aktywna
-      </label>
+      <label for="active">Promocja aktywna</label>
+      <input type="checkbox" id="active" formControlName="active" />
     </div>
 
-    <div class="form-actions">
-      <button class="btn-save" type="submit" [disabled]="form.invalid">Zapisz</button>
-      <button class="btn-cancel" type="button" (click)="router.navigate(['/admin/promotions'])">Anuluj</button>
+    <div class="button-group">
+      <button class="btn-primary" type="submit" [disabled]="form.invalid">Zapisz</button>
+      <button class="btn-secondary" type="button" (click)="router.navigate(['/admin/promotions'])">Anuluj</button>
     </div>
   </form>
 </div>

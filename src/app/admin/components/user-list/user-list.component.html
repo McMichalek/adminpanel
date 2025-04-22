@@ -1,21 +1,33 @@
-<h2>Użytkownicy</h2>
-<button routerLink="/admin/users/new">Dodaj</button>
-<table>
-  <tr>
-    <th>ID</th>
-    <th>Imię i nazwisko</th>
-    <th>E-mail</th>
-    <th>Rola</th>
-    <th>Akcje</th>
-  </tr>
-  <tr *ngFor="let u of (users$ | async)">
-    <td>{{ u.id }}</td>
-    <td>{{ u.name }}</td>
-    <td>{{ u.email }}</td>
-    <td>{{ u.role }}</td>
-    <td>
-      <button [routerLink]="['/admin/users', u.id, 'edit']">Edytuj</button>
-      <button (click)="delete(u.id)">Usuń</button>
-    </td>
-  </tr>
-</table>
+<div class="user-list-container">
+  <!-- Nagłówek -->
+  <div class="header">
+    <button class="btn-back" routerLink="/admin">← Wstecz</button>
+    <h2>Użytkownicy</h2>
+    <button class="btn-add" routerLink="/admin/users/new">+ Dodaj</button>
+  </div>
+
+  <!-- Tabela -->
+  <table class="user-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Imię i nazwisko</th>
+        <th>E-mail</th>
+        <th>Rola</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of (users$ | async)">
+        <td>{{ u.id }}</td>
+        <td>{{ u.name }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.role }}</td>
+        <td class="actions">
+          <button [routerLink]="['/admin/users', u.id, 'edit']" class="btn-edit">Edytuj</button>
+          <button (click)="delete(u.id)" class="btn-delete">Usuń</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -11,7 +11,8 @@ import {CommonModule} from '@angular/common';
   selector: 'app-stock-list',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
-  templateUrl: './stock-list.component.html'
+  templateUrl: './stock-list.component.html',
+  styleUrls: ['./stock-list.component.css']
 })
 export class StockListComponent implements OnInit {
   allStock: StockItem[] = [];
