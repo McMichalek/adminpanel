@@ -6,9 +6,9 @@ import { Order } from '../../../models/order.model';
 import { Dish } from '../../../models/dish.model';
 import { User } from '../../../models/user.model';
 import { Restaurant } from '../../../models/restaurant.model';
-import {CommonModule, CurrencyPipe} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import {Promotion} from '../../../models/promotion.model';
+import { Promotion } from '../../../models/promotion.model';
 
 @Component({
   selector: 'app-order-form',
@@ -19,14 +19,16 @@ import {Promotion} from '../../../models/promotion.model';
 })
 export class OrderFormComponent implements OnInit {
   form!: FormGroup;
-  editId?: number;
+  editId?: string;
 
   users$!: Observable<User[]>;
   restaurants$!: Observable<Restaurant[]>;
   allDishes: Dish[] = [];
   filteredDishes: Dish[] = [];
+  allPromotions: Promotion[] = [];
 
   totalPrice: number = 0;
+  orderItems: { [dishId: string]: number } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -39,68 +41,95 @@ export class OrderFormComponent implements OnInit {
     this.form = this.fb.group({
       userId: [null, Validators.required],
       restaurantId: [null, Validators.required],
-      dishIds: [[], Validators.required]
+      selectedDishId: [null],
+      quantity: [1, [Validators.required, Validators.min(1)]]
     });
 
     this.users$ = this.admin.getUsers();
     this.restaurants$ = this.admin.getRestaurants();
-    this.admin.getDishes().subscribe(d => this.allDishes = d);
+    this.admin.getDishes().subscribe(d => {
+      this.allDishes = d;
+      this.filteredDishes = d;
+    });
     this.admin.getPromotions().subscribe(p => this.allPromotions = p);
 
-    this.form.get('restaurantId')?.valueChanges.subscribe(restId => {
-      this.filteredDishes = this.allDishes.filter(d => d.restaurantId === +restId);
-      this.form.get('dishIds')?.setValue([]); // reset
-      this.updateTotalPrice();
-    });
-
-    this.form.get('dishIds')?.valueChanges.subscribe(() => {
+    this.form.get('restaurantId')?.valueChanges.subscribe(() => {
+      this.filteredDishes = this.allDishes;
+      this.orderItems = {};
       this.updateTotalPrice();
     });
 
     this.route.params.subscribe(p => {
       if (p['id']) {
-        this.editId = +p['id'];
+        this.editId = p['id'];
         this.admin.getOrders().subscribe(orders => {
           const order = orders.find(o => o.id === this.editId);
           if (order) {
-            this.form.patchValue(order);
-            const restaurantId = this.allDishes.find(d => order.dishIds.includes(d.id))?.restaurantId;
-            this.form.get('restaurantId')?.setValue(restaurantId);
-            this.filteredDishes = this.allDishes.filter(d => d.restaurantId === restaurantId);
+            this.form.patchValue({
+              userId: order.userId,
+              restaurantId: order.restaurantId
+            });
+            this.orderItems = { ...order.orderItems };
             this.updateTotalPrice();
           }
         });
       }
     });
   }
-  allPromotions: Promotion[] = [];
-  updateTotalPrice(): void {
-    const dishIds: number[] = this.form.get('dishIds')?.value || [];
 
-    this.totalPrice = dishIds
-      .map(id => this.allDishes.find(d => d.id === id)) // <- bez sprawdzania restauracji
-      .filter((d): d is Dish => !!d)
-      .reduce((sum, dish) => {
-        const promo = this.allPromotions.find(p => p.dishId === dish.id && p.active);
-        return sum + (promo ? promo.newPrice : dish.price);
-      }, 0);
-
-    console.log('Total:', this.totalPrice); // debug
+  get dishQuantities(): { [dishId: string]: number } {
+    return this.orderItems;
   }
-  getDisplayPrice(dishId: number): number {
+
+  addDish(): void {
+    const dishId = this.form.get('selectedDishId')?.value;
+    const qty = this.form.get('quantity')?.value;
+    if (!dishId || qty < 1) return;
+    this.orderItems[dishId] = (this.orderItems[dishId] || 0) + qty;
+    this.form.get('selectedDishId')?.setValue(null);
+    this.form.get('quantity')?.setValue(1);
+    this.updateTotalPrice();
+  }
+
+  removeDish(dishId: string): void {
+    delete this.orderItems[dishId];
+    this.updateTotalPrice();
+  }
+
+  updateTotalPrice(): void {
+    this.totalPrice = Object.entries(this.orderItems)
+      .map(([dishId, qty]) => {
+        const dish = this.allDishes.find(d => d.id === dishId);
+        const promo = this.allPromotions.find(p => p.dishId === dishId);
+        return dish ? (promo ? promo.specialPrice : dish.price) * qty : 0;
+      })
+      .reduce((sum, val) => sum + val, 0);
+  }
+
+  getDisplayPrice(dishId: string): number {
     const dish = this.allDishes.find(d => d.id === dishId);
-    const promo = this.allPromotions.find(p => p.dishId === dishId && p.active);
-    return promo ? promo.newPrice : dish?.price ?? 0;
+    const promo = this.allPromotions.find(p => p.dishId === dishId);
+    return promo ? promo.specialPrice : dish?.price ?? 0;
+  }
+
+  getDishName(dishId: string): string {
+    return this.allDishes.find(d => d.id === dishId)?.name || '';
   }
 
   save(): void {
+    if (Object.keys(this.orderItems).length === 0) return;
     const order: Order = {
       ...this.form.value,
+      orderItems: { ...this.orderItems },
       id: this.editId ?? this.generateOrderId(),
-      price: this.totalPrice,
       totalPrice: this.totalPrice,
-      state: 'Nowe' as any, // use actual enum if available
-      status: 'Nowe'
+      totalPriceIncludingSpecialOffers: this.totalPrice,
+      status: 'checkout',
+      pointsUsed: 0,
+      pointsGained: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      paymentMethod: 'cash'
     };
 
     if (this.editId) {
@@ -112,8 +141,11 @@ export class OrderFormComponent implements OnInit {
     this.router.navigate(['/admin/orders']);
   }
 
-  private generateOrderId(): number {
-    const orders = this.admin['orders$'].getValue();
-    return orders.length > 0 ? Math.max(...orders.map(o => o.id)) + 1 : 1;
+  private generateOrderId(): string {
+    return Date.now().toString();
+  }
+
+  keys(obj: any): string[] {
+    return Object.keys(obj || {});
   }
 }

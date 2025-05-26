@@ -4,8 +4,8 @@ import { AdminService } from '../../services/admin.service';
 import { Promotion } from '../../../models/promotion.model';
 import { Dish } from '../../../models/dish.model';
 import { Restaurant } from '../../../models/restaurant.model';
-import {CommonModule} from '@angular/common';
-import {RouterModule} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-promotion-list',
@@ -27,15 +27,15 @@ export class PromotionListComponent implements OnInit {
     this.admin.getRestaurants().subscribe(r => this.restaurants = r);
   }
 
-  getDishName(dishId: number): string {
+  getDishName(dishId: string): string {
     return this.dishes.find(d => d.id === dishId)?.name || '—';
   }
 
-  getRestaurantName(restaurantId: number): string {
+  getRestaurantName(restaurantId: string): string {
     return this.restaurants.find(r => r.id === restaurantId)?.name || '—';
   }
 
-  delete(id: number) {
-    this.admin.deletePromotion(id);
+  delete(dishId: string, name: string) {
+    this.admin.deletePromotion(dishId, name);
   }
 }

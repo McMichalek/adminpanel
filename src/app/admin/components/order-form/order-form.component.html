@@ -6,7 +6,7 @@
       Klient:
       <select formControlName="userId">
         <option [value]="null" disabled>-- wybierz użytkownika --</option>
-        <option *ngFor="let u of (users$ | async)" [value]="u.id">{{ u.name }}</option>
+        <option *ngFor="let u of (users$ | async)" [value]="u.id">{{ u.email }}</option>
       </select>
     </label>
 
@@ -19,20 +19,33 @@
     </label>
 
     <label>
-      Dania:
-      <select formControlName="dishIds" multiple>
+      Dodaj danie:
+      <select formControlName="selectedDishId">
+        <option [value]="null" disabled>-- wybierz danie --</option>
         <option *ngFor="let d of filteredDishes" [value]="d.id">
           {{ d.name }} ({{ getDisplayPrice(d.id) | currency:'PLN' }})
         </option>
       </select>
+      <input type="number" formControlName="quantity" min="1" style="width: 80px; margin-left: 10px;" />
+      <button type="button" (click)="addDish()">Dodaj</button>
     </label>
+
+    <div *ngIf="dishQuantities && (keys(dishQuantities).length > 0)">
+      <strong>Wybrane dania:</strong>
+      <ul>
+        <li *ngFor="let dishId of keys(dishQuantities)">
+          {{ getDishName(dishId) }} × {{ dishQuantities[dishId] }}
+          <button type="button" (click)="removeDish(dishId)">Usuń</button>
+        </li>
+      </ul>
+    </div>
 
     <div>
       <strong>Cena całkowita:</strong> {{ totalPrice | currency:'PLN' }}
     </div>
 
     <div class="button-group">
-      <button type="submit" [disabled]="form.invalid" class="btn-primary">Zapisz</button>
+      <button type="submit" [disabled]="form.invalid || keys(dishQuantities).length === 0" class="btn-primary">Zapisz</button>
       <button type="button" (click)="router.navigate(['/admin/orders'])" class="btn-secondary">Anuluj</button>
     </div>
   </form>

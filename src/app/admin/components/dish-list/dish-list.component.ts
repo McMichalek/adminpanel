@@ -22,7 +22,7 @@ export class DishListComponent implements OnInit {
     this.dishes$ = this.admin.getDishes();
   }
 
-  delete(id: number) {
+  delete(id: string) {
     this.admin.deleteDish(id);
   }
 }

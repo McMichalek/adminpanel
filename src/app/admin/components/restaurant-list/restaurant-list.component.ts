@@ -22,7 +22,7 @@ export class RestaurantListComponent implements OnInit {
     });
   }
 
-  delete(id: number): void {
+  delete(id: string): void {
     this.admin.deleteRestaurant(id);
     this.restaurants = this.restaurants.filter(r => r.id !== id);
   }

@@ -8,28 +8,20 @@
   <table>
     <thead>
       <tr>
-        <th>Tytuł</th>
-        <th>Opis</th>
+        <th>Nazwa promocji</th>
         <th>Cena promocyjna</th>
-        <th>% Zniżki</th>
         <th>Danie</th>
-        <th>Restauracja</th>
-        <th>Aktywna</th>
         <th>Akcje</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let p of (promotions$ | async)">
-        <td>{{ p.title }}</td>
-        <td>{{ p.description }}</td>
-        <td>{{ p.newPrice | currency:'PLN' }}</td>
-        <td>{{ p.discountPercentage }}%</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.specialPrice | currency:'PLN' }}</td>
         <td>{{ getDishName(p.dishId) }}</td>
-        <td>{{ getRestaurantName(p.restaurantId) }}</td>
-        <td>{{ p.active ? 'Tak' : 'Nie' }}</td>
         <td class="actions">
-          <button class="btn-edit" [routerLink]="['/admin/promotions', p.id, 'edit']">Edytuj</button>
-          <button class="btn-delete" (click)="delete(p.id)">Usuń</button>
+          <button class="btn-edit" [routerLink]="['/admin/promotions', p.dishId, 'edit']">Edytuj</button>
+          <button class="btn-delete" (click)="delete(p.dishId, p.name)">Usuń</button>
         </td>
       </tr>
     </tbody>

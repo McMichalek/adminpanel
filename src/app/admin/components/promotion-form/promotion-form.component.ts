@@ -1,25 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ActivatedRoute, Router, RouterModule} from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { Promotion } from '../../../models/promotion.model';
-import {CommonModule} from '@angular/common';
-import {Observable} from 'rxjs';
-import {Dish} from '../../../models/dish.model';
-import {Restaurant} from '../../../models/restaurant.model';
+import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+import { Dish } from '../../../models/dish.model';
 
 @Component({
   selector: 'app-promotion-form',
   standalone: true,
-
-  imports: [CommonModule, RouterModule,ReactiveFormsModule],
-
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './promotion-form.component.html',
   styleUrls: ['./promotion-form.component.css'],
 })
 export class PromotionFormComponent implements OnInit {
   form!: FormGroup;
-  editId?: number;
+  editId?: string;
+  editPromotion?: Promotion;
+  editOldDishId?: string;
+  editOldName?: string;
+  allDishes: Dish[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -27,38 +28,29 @@ export class PromotionFormComponent implements OnInit {
     private route: ActivatedRoute,
     protected router: Router
   ) {}
-  dishes$!: Observable<Dish[]>;
-  restaurants$!: Observable<Restaurant[]>;
-  filteredDishes: Dish[] = [];
-  allDishes: Dish[] = [];
-  ngOnInit(): void {
-    this.restaurants$ = this.admin.getRestaurants();
-    this.dishes$ = this.admin.getDishes();
 
-    this.dishes$.subscribe(dishes => {
+  ngOnInit(): void {
+    this.admin.getDishes().subscribe(dishes => {
       this.allDishes = dishes;
     });
-    this.form = this.fb.group({
-      restaurantId: [null, Validators.required],
-      dishId: [null, Validators.required],
 
-      newPrice: [0, [Validators.required, Validators.min(0.01)]],
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      discountPercentage: [0, [Validators.required, Validators.min(1), Validators.max(100)]],
-      active: [true]
-    });
-    this.form.get('restaurantId')?.valueChanges.subscribe(restId => {
-      this.filteredDishes = this.allDishes.filter(d => d.restaurantId === +restId);
-      this.form.get('dishId')?.setValue(null);
+    this.form = this.fb.group({
+      dishId: [null, Validators.required],
+      name: ['', Validators.required],
+      specialPrice: [0, [Validators.required, Validators.min(0.01)]]
     });
 
     this.route.params.subscribe(params => {
       if (params['id']) {
-        this.editId = +params['id'];
+        this.editId = params['id'];
         this.admin.getPromotions().subscribe(promos => {
-          const promo = promos.find(p => p.id === this.editId);
+          const promo = promos.find(
+            p => p.dishId === params['id']
+          );
           if (promo) {
+            this.editPromotion = promo;
+            this.editOldDishId = promo.dishId;
+            this.editOldName = promo.name;
             this.form.patchValue(promo);
           }
         });
@@ -67,9 +59,13 @@ export class PromotionFormComponent implements OnInit {
   }
 
   save(): void {
-    const data: Promotion = { id: this.editId || Date.now(), ...this.form.value };
-    if (this.editId) {
-      this.admin.updatePromotion(data);
+    const data: Promotion = { ...this.form.value };
+    if (this.editPromotion) {
+      this.admin.updatePromotion(
+        data,
+        this.editOldDishId ?? data.dishId,
+        this.editOldName ?? data.name
+      );
     } else {
       this.admin.addPromotion(data);
     }

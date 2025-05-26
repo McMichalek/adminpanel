@@ -22,23 +22,28 @@ import {RouterLink} from '@angular/router';
 export class OrderListComponent implements OnInit {
   orders$!: Observable<(Order & { userName: string, dishNames: string[] })[]>;
 
-  constructor(private admin: AdminService) {}
+constructor(private admin: AdminService) {}
 
-  ngOnInit() {
-    this.orders$ = combineLatest([
-      this.admin.getOrders(),
-      this.admin.getUsers(),
-      this.admin.getDishes()
-    ]).pipe(
-      map(([orders, users, dishes]) => orders.map(o => ({
-        ...o,
-        userName: users.find(u => u.id === o.userId)?.name || 'Nieznany',
-        dishNames: dishes.filter(d => o.dishIds.includes(d.id)).map(d => d.name)
-      })))
-    );
-  }
+ngOnInit() {
+  this.orders$ = combineLatest([
+    this.admin.getOrders(),
+    this.admin.getUsers(),
+    this.admin.getDishes()
+  ]).pipe(
+    map(([orders, users, dishes]) => orders.map(o => ({
+      ...o,
+      userName: users.find(u => u.id === o.userId)?.email || 'Nieznany',
+      dishNames: Object.entries(o.orderItems)
+        .map(([dishId, qty]) => {
+          const dish = dishes.find(d => d.id === dishId);
+          return dish ? `${dish.name} × ${qty}` : '';
+        })
+        .filter(Boolean)
+    })))
+  );
+}
 
-  delete(id: number): void {
-    this.admin.deleteOrder(id);
-  }
+delete(id: string): void {
+  this.admin.deleteOrder(id);
+}
 }

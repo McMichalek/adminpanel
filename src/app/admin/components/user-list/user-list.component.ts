@@ -22,7 +22,7 @@ export class UserListComponent implements OnInit {
     this.users$ = this.admin.getUsers();
   }
 
-  delete(id: number): void {
+  delete(id: string): void {
     this.admin.deleteUser(id);
   }
 }

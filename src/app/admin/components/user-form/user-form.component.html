@@ -2,13 +2,7 @@
   <div class="form-header">
     <h2>{{ editId ? 'Edytuj' : 'Dodaj' }} użytkownika</h2>
   </div>
-
   <form [formGroup]="form" (ngSubmit)="save()" class="user-form">
-    <div class="form-group">
-      <label>Imię i nazwisko</label>
-      <input type="text" formControlName="name" />
-    </div>
-
     <div class="form-group">
       <label>Email</label>
       <input type="email" formControlName="email" />
@@ -23,10 +17,15 @@
       </select>
     </div>
 
+    <div class="form-group">
+      <label>Punkty</label>
+      <input type="number" formControlName="points" min="0" />
+    </div>
+
+    <!-- Jeśli chcesz, możesz dodać obsługę restaurantId i specialOffers -->
+
     <div class="form-actions">
-      <!-- Zmieniona klasa na btn-primary -->
       <button type="submit" [disabled]="form.invalid" class="btn-primary">Zapisz</button>
-      <!-- Zmieniona klasa na btn-secondary -->
       <button type="button" (click)="router.navigate(['/admin/users'])" class="btn-secondary">Anuluj</button>
     </div>
   </form>

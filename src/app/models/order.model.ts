@@ -1,18 +1,22 @@
-export type OrderState =
+export type OrderStatus =
   | 'checkout'
-  | 'payment'
   | 'paid'
-  | 'in-progress'
+  | 'in_progress'
+  | 'ready'
   | 'completed'
-  | 'picked-up';
+  | 'cancelled';
 
 export interface Order {
-  id: number;
-  userId: number;
-  restaurantId: number;
-  dishIds: number[];    // lista identyfikatorów zamówionych dań
-  price: number;        // suma cen (zaaktualizowana o promocje)
-  state: OrderState;
-  totalPrice: number; // required by template
-  status: string;
+  id: string;
+  userId: string;
+  orderItems: { [dishId: string]: number };
+  totalPrice: number;
+  totalPriceIncludingSpecialOffers: number;
+  status: OrderStatus;
+  pointsUsed: number;
+  pointsGained: number;
+  createdAt: string;
+  updatedAt: string;
+  restaurantId: string;
+  paymentMethod: string;
 }

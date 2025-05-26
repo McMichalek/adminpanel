@@ -11,8 +11,6 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { OrderListComponent } from './components/order-list/order-list.component';
 import { OrderFormComponent } from './components/order-form/order-form.component';
-import { StockListComponent } from './components/stock-list/stock-list.component';
-import { StockFormComponent } from './components/stock-form/stock-form.component';
 
 export const adminRoutes: Routes = [
   { path: '', component: AdminHomeComponent },
@@ -31,9 +29,6 @@ export const adminRoutes: Routes = [
   { path: 'orders', component: OrderListComponent },
   { path: 'orders/new', component: OrderFormComponent },
   { path: 'orders/:id/edit', component: OrderFormComponent },
-  { path: 'stock', component: StockListComponent },
-  { path: 'stock/new', component: StockFormComponent },
-  { path: 'stock/:id/edit', component: StockFormComponent },
   { path: '**', redirectTo: '' }
 ];
 

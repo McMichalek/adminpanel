@@ -2,11 +2,10 @@ import { Promotion } from './promotion.model';
 
 
 export interface Dish {
-  id: number;
+  id: string;
   name: string;
   description: string;
+  ingredients: string;
   price: number;
-  restaurantId: number;
-  isAvailable: boolean;
-  promotion?: Promotion; // opcjonalna oferta promocyjna
+  points: number;
 }

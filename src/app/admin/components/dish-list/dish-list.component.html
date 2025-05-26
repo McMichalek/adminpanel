@@ -8,23 +8,23 @@
   <table>
     <thead>
       <tr>
-        <th>Restauracja ID</th>
-        <th>Danie ID</th>
+        <th>ID</th>
         <th>Nazwa</th>
         <th>Opis</th>
+        <th>Składniki</th>
         <th>Cena</th>
-        <th>Dostępność</th>
+        <th>Punkty</th>
         <th>Akcje</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let d of (dishes$ | async)">
-        <td>{{ d.restaurantId }}</td>
         <td>{{ d.id }}</td>
         <td>{{ d.name }}</td>
         <td>{{ d.description }}</td>
+        <td>{{ d.ingredients }}</td>
         <td>{{ d.price | currency:'PLN' }}</td>
-        <td>{{ d.isAvailable ? 'Tak' : 'Nie' }}</td>
+        <td>{{ d.points }}</td>
         <td class="actions">
           <button class="btn-edit" [routerLink]="['/admin/dishes', d.id, 'edit']">Edytuj</button>
           <button class="btn-delete" (click)="delete(d.id)">Usuń</button>

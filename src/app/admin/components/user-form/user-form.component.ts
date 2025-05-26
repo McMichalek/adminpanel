@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 })
 export class UserFormComponent implements OnInit {
   form!: FormGroup;
-  editId?: number;
+  editId?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -25,14 +25,16 @@ export class UserFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      role: ['', Validators.required] // Default role
+      role: ['', Validators.required],
+      restaurantId: [''],
+      points: [0, [Validators.required, Validators.min(0)]],
+      specialOffers: [[]]
     });
 
     this.route.params.subscribe(params => {
       if (params['id']) {
-        this.editId = +params['id'];
+        this.editId = params['id'];
         this.admin.getUsers().subscribe(users => {
           const user = users.find(u => u.id === this.editId);
           if (user) {
@@ -46,7 +48,6 @@ export class UserFormComponent implements OnInit {
   save(): void {
     const data: User = {
       id: this.editId ?? this.generateUserId(),
-      promoIds: [],
       ...this.form.value
     };
 
@@ -59,8 +60,7 @@ export class UserFormComponent implements OnInit {
     this.router.navigate(['/admin/users']);
   }
 
-  private generateUserId(): number {
-    const users = this.admin['users$']?.getValue?.() || [];
-    return users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
+  private generateUserId(): string {
+    return Date.now().toString();
   }
 }

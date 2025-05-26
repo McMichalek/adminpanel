@@ -13,21 +13,18 @@
     </label>
 
     <label>
+      Składniki:
+      <input type="text" formControlName="ingredients" />
+    </label>
+
+    <label>
       Cena:
       <input type="number" formControlName="price" />
     </label>
 
     <label>
-      Restauracja:
-      <select formControlName="restaurantId">
-        <option [value]="null" disabled>-- wybierz --</option>
-        <option *ngFor="let r of (restaurants$ | async)" [value]="r.id">{{ r.name }}</option>
-      </select>
-    </label>
-
-    <label class="checkbox">
-      <input type="checkbox" formControlName="isAvailable" />
-      Dostępne
+      Punkty:
+      <input type="number" formControlName="points" />
     </label>
 
     <div class="button-group">

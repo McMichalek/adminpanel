@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 })
 export class RestaurantFormComponent implements OnInit {
   form!: FormGroup;
-  editId?: number;
+  editId?: string;
   restaurants: Restaurant[] = [];
 
   constructor(
@@ -25,22 +25,23 @@ export class RestaurantFormComponent implements OnInit {
     public router: Router
   ) {}
 
-
   ngOnInit(): void {
-    this.admin.getRestaurants().subscribe(restaurants => { // 🔧 POBIERANIE DANYCH
+    this.admin.getRestaurants().subscribe(restaurants => {
       this.restaurants = restaurants;
     });
 
     this.form = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
-      openingHours: ['', Validators.required]
+      city: ['', Validators.required],
+      openingHours: ['', Validators.required],
+      specialOffers: [[]]
     });
 
     this.route.params.subscribe(p => {
       if (p['id']) {
-        this.editId = +p['id'];
-        const restaurant = this.restaurants.find(r => r.id === this.editId); // 🔧 TERAZ DZIAŁA
+        this.editId = p['id'];
+        const restaurant = this.restaurants.find(r => r.id === this.editId);
         if (restaurant) {
           this.form.patchValue(restaurant);
         }
@@ -51,7 +52,6 @@ export class RestaurantFormComponent implements OnInit {
   save(): void {
     const restaurant: Restaurant = {
       id: this.editId ?? this.generateRestaurantId(),
-      promoIds: [],
       ...this.form.value
     };
 
@@ -64,8 +64,7 @@ export class RestaurantFormComponent implements OnInit {
     this.router.navigate(['/admin/restaurants']);
   }
 
-  private generateRestaurantId(): number {
-    const restaurants = this.admin['restaurants$']?.getValue?.() || [];
-    return restaurants.length > 0 ? Math.max(...restaurants.map(r => r.id)) + 1 : 1;
+  private generateRestaurantId(): string {
+    return Date.now().toString();
   }
 }

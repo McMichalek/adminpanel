@@ -1,7 +1,8 @@
 export interface Restaurant {
-  id: number;
+  id: string;
   name: string;
+  city: string;
   address: string;
   openingHours: string;
-  promoIds: number[];  // lista identyfikatorów ofert promocyjnych
+  specialOffers: string[]; // lista id ofert promocyjnych
 }

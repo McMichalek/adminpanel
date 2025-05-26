@@ -1,12 +1,10 @@
-export type Role = 'admin' | 'franchisee' | 'worker' | 'customer';
+export type Role = 'admin' | 'worker' | 'customer';
 
 export interface User {
-  id: number;
+  id: string;
   email: string;
-  name: string;
-  password: string;
   role: Role;
-  restaurantId?: number; // jeśli worker lub franchisee
+  restaurantId?: string | null; // jeśli worker
   points: number;
-  promoIds: number[];    // lista id ofert promocyjnych
+  specialOffers: string[];      // lista id ofert promocyjnych
 }

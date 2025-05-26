@@ -17,7 +17,7 @@ import {CommonModule} from '@angular/common';
 })
 export class DishFormComponent implements OnInit {
   form!: FormGroup;
-  editId?: number;
+  editId?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -25,22 +25,19 @@ export class DishFormComponent implements OnInit {
     private route: ActivatedRoute,
     protected router: Router
   ) {}
-  // @ts-ignore
 
-  restaurants$!: Observable<Restaurant[]>;
   ngOnInit(): void {
-    this.restaurants$ = this.admin.getRestaurants();
     this.form = this.fb.group({
       name: ['', Validators.required],
       description: [''],
+      ingredients: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
-      restaurantId: [null, Validators.required],
-      isAvailable: [true]
+      points: [0, [Validators.required, Validators.min(0)]]
     });
 
     this.route.params.subscribe(p => {
       if (p['id']) {
-        this.editId = +p['id'];
+        this.editId = p['id'];
         this.admin.getDishes().subscribe(dishes => {
           const dish = dishes.find(d => d.id === this.editId);
           if (dish) {
@@ -54,7 +51,7 @@ export class DishFormComponent implements OnInit {
   save(): void {
     const data: Dish = { ...this.form.value };
     if (this.editId) {
-      this.admin.updateDish(data);
+      this.admin.updateDish({ ...data, id: this.editId });
     } else {
       this.admin.addDish(data);
     }

@@ -3,50 +3,24 @@
 
   <form [formGroup]="form" (ngSubmit)="save()">
     <div class="form-group">
-      <label for="restaurantId">Restauracja</label>
-      <select id="restaurantId" formControlName="restaurantId">
-        <option [value]="null" disabled>-- wybierz restaurację --</option>
-        <option *ngFor="let r of (restaurants$ | async)" [value]="r.id">{{ r.name }}</option>
-      </select>
-    </div>
-
-    <div class="form-group">
       <label for="dishId">Danie</label>
       <select id="dishId" formControlName="dishId">
         <option [value]="null" disabled>-- wybierz danie --</option>
-        <option *ngFor="let d of filteredDishes" [value]="d.id">{{ d.name }}</option>
+        <option *ngFor="let d of allDishes" [value]="d.id">{{ d.name }}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="newPrice">Nowa cena</label>
-      <input type="number" id="newPrice" formControlName="newPrice" min="0.01" step="0.01" />
-      <div class="error" *ngIf="form.get('newPrice')?.invalid && form.get('newPrice')?.touched">
+      <label for="name">Nazwa promocji</label>
+      <input type="text" id="name" formControlName="name" />
+    </div>
+
+    <div class="form-group">
+      <label for="specialPrice">Cena promocyjna</label>
+      <input type="number" id="specialPrice" formControlName="specialPrice" min="0.01" step="0.01" />
+      <div class="error" *ngIf="form.get('specialPrice')?.invalid && form.get('specialPrice')?.touched">
         Cena musi być większa od zera.
       </div>
-    </div>
-
-    <div class="form-group">
-      <label for="title">Tytuł</label>
-      <input type="text" id="title" formControlName="title" />
-    </div>
-
-    <div class="form-group">
-      <label for="description">Opis</label>
-      <textarea id="description" formControlName="description"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="discountPercentage">Rabat (%)</label>
-      <input type="number" id="discountPercentage" formControlName="discountPercentage" min="1" max="100" />
-      <div class="error" *ngIf="form.get('discountPercentage')?.invalid && form.get('discountPercentage')?.touched">
-        Rabat musi być z zakresu 1–100%.
-      </div>
-    </div>
-
-    <div class="form-group checkbox">
-      <label for="active">Promocja aktywna</label>
-      <input type="checkbox" id="active" formControlName="active" />
     </div>
 
     <div class="button-group">
