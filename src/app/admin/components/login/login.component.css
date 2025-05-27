@@ -1,0 +1,64 @@
+/* Styl ogólny */
+:host {
+  display: block;
+  font-family: Arial, sans-serif;
+  background-color: #fefefe;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Kontener formularza */
+.login-container {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Nagłówek */
+.login-container h2 {
+  margin-bottom: 25px;
+  text-align: center;
+  color: #c62828;
+}
+
+/* Pola formularza */
+.login-container input[type="email"],
+.login-container input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* Przycisk */
+.login-container button {
+  width: 100%;
+  padding: 12px;
+  background-color: #c62828;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+  background-color: #a91c1c;
+}
+
+/* Komunikat o błędzie */
+.login-container p {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 0.95rem;
+}

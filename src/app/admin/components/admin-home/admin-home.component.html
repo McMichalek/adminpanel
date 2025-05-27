@@ -2,12 +2,15 @@
   <h1>Panel Administracyjny</h1>
 </div>
 
-<div class="admin-nav">
-  <ul>
-    <li><a routerLink="/admin/restaurants">Restauracje</a></li>
-    <li><a routerLink="/admin/dishes">Dania</a></li>
-    <li><a routerLink="/admin/promotions">Promocje</a></li>
-    <li><a routerLink="/admin/orders">Zamówienia</a></li>
-    <li><a routerLink="/admin/users">Użytkownicy</a></li>
-  </ul>
-</div>
+
+<nav class="admin-nav">
+    <a routerLink="/admin/dishes" routerLinkActive="active">🍽️ Dania</a>
+    <a routerLink="/admin/promotions" routerLinkActive="active">🏷️ Promocje</a>
+    <a routerLink="/admin/restaurants" routerLinkActive="active">🍴 Restauracje</a>
+    <a routerLink="/admin/users" routerLinkActive="active">👥 Użytkownicy</a>
+    <a routerLink="/admin/orders" routerLinkActive="active">📦 Zamówienia</a>
+    <button (click)="logout()"> Wyloguj się</button>
+</nav>
+<main class="admin-content">
+  <router-outlet></router-outlet>
+</main>

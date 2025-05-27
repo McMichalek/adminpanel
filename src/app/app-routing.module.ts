@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+    loadChildren: () => import('./admin/admin-routing.module').then(m => m.routes)
   },
-  { path: '**', redirectTo: 'admin' } // fallback
+  { path: '', redirectTo: 'admin/login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'admin/login' }
 ];
 
 @NgModule({
