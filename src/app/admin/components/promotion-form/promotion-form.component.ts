@@ -14,12 +14,12 @@ import { Dish } from '../../../models/dish.model';
   templateUrl: './promotion-form.component.html',
   styleUrls: ['./promotion-form.component.css'],
 })
+// ...existing imports...
 export class PromotionFormComponent implements OnInit {
   form!: FormGroup;
   editId?: string;
   editPromotion?: Promotion;
   editOldDishId?: string;
-  editOldName?: string;
   allDishes: Dish[] = [];
 
   constructor(
@@ -36,7 +36,6 @@ export class PromotionFormComponent implements OnInit {
 
     this.form = this.fb.group({
       dishId: [null, Validators.required],
-      name: ['', Validators.required],
       specialPrice: [0, [Validators.required, Validators.min(0.01)]]
     });
 
@@ -50,7 +49,6 @@ export class PromotionFormComponent implements OnInit {
           if (promo) {
             this.editPromotion = promo;
             this.editOldDishId = promo.dishId;
-            this.editOldName = promo.name;
             this.form.patchValue(promo);
           }
         });
@@ -63,8 +61,7 @@ export class PromotionFormComponent implements OnInit {
     if (this.editPromotion) {
       this.admin.updatePromotion(
         data,
-        this.editOldDishId ?? data.dishId,
-        this.editOldName ?? data.name
+        this.editOldDishId ?? data.dishId
       );
     } else {
       this.admin.addPromotion(data);

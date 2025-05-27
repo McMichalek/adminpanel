@@ -6,6 +6,7 @@ import { Promotion } from '../../models/promotion.model';
 import { User } from '../../models/user.model';
 import { Order } from '../../models/order.model';
 
+// ...existing imports...
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
@@ -14,7 +15,6 @@ export class AdminService {
   private promotions$ = new BehaviorSubject<Promotion[]>([]);
   private users$ = new BehaviorSubject<User[]>([]);
   private orders$ = new BehaviorSubject<Order[]>([]);
-  
 
   // Restaurants
   getRestaurants(): Observable<Restaurant[]> { return this.restaurants$.asObservable(); }
@@ -24,7 +24,6 @@ export class AdminService {
     const newRestaurant: Restaurant = { ...r, id: nextId };
     this.restaurants$.next([...current, newRestaurant]);
   }
-
   updateRestaurant(r: Restaurant) { this.restaurants$.next(this.restaurants$.value.map(x => x.id === r.id ? r : x)); }
   deleteRestaurant(id: string) { this.restaurants$.next(this.restaurants$.value.filter(x => x.id !== id)); }
 
@@ -40,23 +39,20 @@ export class AdminService {
   deleteDish(id: string) { this.dishes$.next(this.dishes$.value.filter(x => x.id !== id)); }
 
   // Promotions
-getPromotions(): Observable<Promotion[]> { return this.promotions$.asObservable(); }
-addPromotion(p: Promotion) { this.promotions$.next([...this.promotions$.value, p]); }
-updatePromotion(newPromo: Promotion, oldDishId: string, oldName: string) {
-  this.promotions$.next(
-    this.promotions$.value.map(x =>
-      x.dishId === oldDishId && x.name === oldName ? newPromo : x
-    )
-  );
-}
-
-deletePromotion(dishId: string, name: string) {
-  this.promotions$.next(
-    this.promotions$.value.filter(x =>
-      !(x.dishId === dishId && x.name === name)
-    )
-  );
-}
+  getPromotions(): Observable<Promotion[]> { return this.promotions$.asObservable(); }
+  addPromotion(p: Promotion) { this.promotions$.next([...this.promotions$.value, p]); }
+  updatePromotion(newPromo: Promotion, oldDishId: string) {
+    this.promotions$.next(
+      this.promotions$.value.map(x =>
+        x.dishId === oldDishId ? newPromo : x
+      )
+    );
+  }
+  deletePromotion(dishId: string) {
+    this.promotions$.next(
+      this.promotions$.value.filter(x => x.dishId !== dishId)
+    );
+  }
 
   // Users
   getUsers(): Observable<User[]> { return this.users$.asObservable(); }
@@ -83,8 +79,8 @@ deletePromotion(dishId: string, name: string) {
   constructor() {
     // Dummy promotions
     const promotions: Promotion[] = [
-      { dishId: '1', name: '10% Off', specialPrice: 18 },
-      { dishId: '3', name: '20% Off', specialPrice: 14.4 }
+      { dishId: '1', specialPrice: 18 },
+      { dishId: '3', specialPrice: 14.4 }
     ];
     this.promotions$.next(promotions);
 

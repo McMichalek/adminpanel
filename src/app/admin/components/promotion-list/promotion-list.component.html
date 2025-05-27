@@ -8,20 +8,20 @@
   <table>
     <thead>
       <tr>
-        <th>Nazwa promocji</th>
-        <th>Cena promocyjna</th>
+        <th>ID</th>
         <th>Danie</th>
+        <th>Cena promocyjna</th>
         <th>Akcje</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let p of (promotions$ | async)">
-        <td>{{ p.name }}</td>
-        <td>{{ p.specialPrice | currency:'PLN' }}</td>
+      <tr *ngFor="let p of (promotions$ | async); let i = index">
+        <td>{{ i + 1 }}</td>
         <td>{{ getDishName(p.dishId) }}</td>
-        <td class="actions">
+        <td>{{ p.specialPrice | number:'1.2-2' }} zł</td>
+        <td>
           <button class="btn-edit" [routerLink]="['/admin/promotions', p.dishId, 'edit']">Edytuj</button>
-          <button class="btn-delete" (click)="delete(p.dishId, p.name)">Usuń</button>
+          <button class="btn-delete" (click)="delete(p.dishId)">Usuń</button>
         </td>
       </tr>
     </tbody>
