@@ -17,11 +17,11 @@
     <tbody>
       <tr *ngFor="let p of (promotions$ | async); let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ getDishName(p.dishId) }}</td>
-        <td>{{ p.specialPrice | number:'1.2-2' }} zł</td>
+        <td>{{ getDishName(p.dish_id) }}</td>
+        <td>{{ p.special_price | number:'1.2-2' }} zł</td>
         <td>
-          <button class="btn-edit" [routerLink]="['/admin/promotions', p.dishId, 'edit']">Edytuj</button>
-          <button class="btn-delete" (click)="delete(p.dishId)">Usuń</button>
+          <button class="btn-edit" [routerLink]="['/admin/promotions', p.dish_id, 'edit']">Edytuj</button>
+          <button class="btn-delete" (click)="delete(p.dish_id)">Usuń</button>
         </td>
       </tr>
     </tbody>

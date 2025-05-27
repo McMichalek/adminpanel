@@ -1,5 +1,4 @@
 export interface Promotion {
-  dishId: string;
-  name: string;
-  specialPrice: number;
+  dish_id: string;
+  special_price: number;
 }

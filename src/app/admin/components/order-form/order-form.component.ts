@@ -39,8 +39,8 @@ export class OrderFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      userId: [null, Validators.required],
-      restaurantId: [null, Validators.required],
+      user_id: [null, Validators.required],
+      restaurant_id: [null, Validators.required],
       selectedDishId: [null],
       quantity: [1, [Validators.required, Validators.min(1)]]
     });
@@ -53,7 +53,7 @@ export class OrderFormComponent implements OnInit {
     });
     this.admin.getPromotions().subscribe(p => this.allPromotions = p);
 
-    this.form.get('restaurantId')?.valueChanges.subscribe(() => {
+    this.form.get('restaurant_id')?.valueChanges.subscribe(() => {
       this.filteredDishes = this.allDishes;
       this.orderItems = {};
       this.updateTotalPrice();
@@ -66,10 +66,10 @@ export class OrderFormComponent implements OnInit {
           const order = orders.find(o => o.id === this.editId);
           if (order) {
             this.form.patchValue({
-              userId: order.userId,
-              restaurantId: order.restaurantId
+              user_id: order.user_id,
+              restaurant_id: order.restaurant_id
             });
-            this.orderItems = { ...order.orderItems };
+            this.orderItems = { ...order.order_items };
             this.updateTotalPrice();
           }
         });
@@ -100,16 +100,16 @@ export class OrderFormComponent implements OnInit {
     this.totalPrice = Object.entries(this.orderItems)
       .map(([dishId, qty]) => {
         const dish = this.allDishes.find(d => d.id === dishId);
-        const promo = this.allPromotions.find(p => p.dishId === dishId);
-        return dish ? (promo ? promo.specialPrice : dish.price) * qty : 0;
+        const promo = this.allPromotions.find(p => p.dish_id === dishId);
+        return dish ? (promo ? promo.special_price : dish.price) * qty : 0;
       })
       .reduce((sum, val) => sum + val, 0);
   }
 
   getDisplayPrice(dishId: string): number {
     const dish = this.allDishes.find(d => d.id === dishId);
-    const promo = this.allPromotions.find(p => p.dishId === dishId);
-    return promo ? promo.specialPrice : dish?.price ?? 0;
+    const promo = this.allPromotions.find(p => p.dish_id === dishId);
+    return promo ? promo.special_price : dish?.price ?? 0;
   }
 
   getDishName(dishId: string): string {
@@ -120,16 +120,16 @@ export class OrderFormComponent implements OnInit {
     if (Object.keys(this.orderItems).length === 0) return;
     const order: Order = {
       ...this.form.value,
-      orderItems: { ...this.orderItems },
+      order_items: { ...this.orderItems },
       id: this.editId ?? this.generateOrderId(),
-      totalPrice: this.totalPrice,
-      totalPriceIncludingSpecialOffers: this.totalPrice,
+      total_price: this.totalPrice,
+      total_price_including_special_offers: this.totalPrice,
       status: 'checkout',
-      pointsUsed: 0,
-      pointsGained: 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      paymentMethod: 'cash'
+      points_used: 0,
+      points_gained: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      payment_method: 'cash'
     };
 
     if (this.editId) {

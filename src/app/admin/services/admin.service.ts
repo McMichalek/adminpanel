@@ -6,8 +6,6 @@ import { Promotion } from '../../models/promotion.model';
 import { User } from '../../models/user.model';
 import { Order } from '../../models/order.model';
 
-// ...existing imports...
-
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private restaurants$ = new BehaviorSubject<Restaurant[]>([]);
@@ -44,13 +42,13 @@ export class AdminService {
   updatePromotion(newPromo: Promotion, oldDishId: string) {
     this.promotions$.next(
       this.promotions$.value.map(x =>
-        x.dishId === oldDishId ? newPromo : x
+        x.dish_id === oldDishId ? newPromo : x
       )
     );
   }
-  deletePromotion(dishId: string) {
+  deletePromotion(dish_id: string) {
     this.promotions$.next(
-      this.promotions$.value.filter(x => x.dishId !== dishId)
+      this.promotions$.value.filter(x => x.dish_id !== dish_id)
     );
   }
 
@@ -79,23 +77,23 @@ export class AdminService {
   constructor() {
     // Dummy promotions
     const promotions: Promotion[] = [
-      { dishId: '1', specialPrice: 18 },
-      { dishId: '3', specialPrice: 14.4 }
+      { dish_id: '1', special_price: 18 },
+      { dish_id: '3', special_price: 14.4 }
     ];
     this.promotions$.next(promotions);
 
     // Dummy restaurants
     const restaurants: Restaurant[] = [
-      { id: '1', name: 'Pizza Place', city: 'Warszawa', address: 'Main St 1', openingHours: '10:00-22:00', specialOffers: ['1'] },
-      { id: '2', name: 'Burger Town', city: 'Kraków', address: 'High St 5', openingHours: '11:00-23:00', specialOffers: ['2'] }
+      { id: '1', name: 'Pizza Place', city: 'Warszawa', address: 'Main St 1', opening_hours: '10:00-22:00', special_offers: ['1'] },
+      { id: '2', name: 'Burger Town', city: 'Kraków', address: 'High St 5', opening_hours: '11:00-23:00', special_offers: ['2'] }
     ];
     this.restaurants$.next(restaurants);
 
     // Dummy users
     const users: User[] = [
-      { id: '1', email: 'alice@example.com', role: 'customer', points: 50, specialOffers: ['1'] },
-      { id: '2', email: 'bob@example.com', role: 'worker', restaurantId: '1', points: 80, specialOffers: [] },
-      { id: '3', email: 'carol@example.com', role: 'worker', restaurantId: '2', points: 30, specialOffers: ['2'] }
+      { id: '1', email: 'alice@example.com', role: 'customer', points: 50, special_offers: ['1'] },
+      { id: '2', email: 'bob@example.com', role: 'worker', restaurant_id: '1', points: 80, special_offers: [] },
+      { id: '3', email: 'carol@example.com', role: 'worker', restaurant_id: '2', points: 30, special_offers: ['2'] }
     ];
     this.users$.next(users);
 
@@ -112,17 +110,17 @@ export class AdminService {
     const orders: Order[] = [
       {
         id: '1',
-        userId: '1',
-        restaurantId: '1',
-        orderItems: { '1': 1, '2': 2 },
-        totalPrice: 43,
-        totalPriceIncludingSpecialOffers: 43,
+        user_id: '1',
+        restaurant_id: '1',
+        order_items: { '1': 1, '2': 2 },
+        total_price: 43,
+        total_price_including_special_offers: 43,
         status: 'checkout',
-        pointsUsed: 0,
-        pointsGained: 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        paymentMethod: 'cash'
+        points_used: 0,
+        points_gained: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        payment_method: 'cash'
       }
     ];
     this.orders$.next(orders);

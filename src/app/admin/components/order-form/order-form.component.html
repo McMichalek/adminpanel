@@ -4,18 +4,18 @@
   <form [formGroup]="form" (ngSubmit)="save()">
     <label>
       Klient:
-      <select formControlName="userId">
-        <option [value]="null" disabled>-- wybierz użytkownika --</option>
-        <option *ngFor="let u of (users$ | async)" [value]="u.id">{{ u.email }}</option>
-      </select>
+      <select formControlName="user_id">
+      <option [value]="null" disabled>-- wybierz użytkownika --</option>
+      <option *ngFor="let u of (users$ | async)" [value]="u.id">{{ u.email }}</option>
+    </select>
     </label>
 
     <label>
       Restauracja:
-      <select formControlName="restaurantId">
-        <option [value]="null" disabled>-- wybierz restaurację --</option>
-        <option *ngFor="let r of (restaurants$ | async)" [value]="r.id">{{ r.name }}</option>
-      </select>
+      <select formControlName="restaurant_id">
+      <option [value]="null" disabled>-- wybierz restaurację --</option>
+      <option *ngFor="let r of (restaurants$ | async)" [value]="r.id">{{ r.name }}</option>
+    </select>
     </label>
 
     <label>

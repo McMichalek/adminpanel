@@ -4,7 +4,7 @@ export interface User {
   id: string;
   email: string;
   role: Role;
-  restaurantId?: string | null; // jeśli worker
+  restaurant_id?: string | null; // jeśli worker
   points: number;
-  specialOffers: string[];      // lista id ofert promocyjnych
+  special_offers: string[];      // lista id ofert promocyjnych
 }

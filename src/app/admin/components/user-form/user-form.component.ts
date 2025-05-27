@@ -27,9 +27,9 @@ export class UserFormComponent implements OnInit {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       role: ['', Validators.required],
-      restaurantId: [''],
+      restaurant_id: [''],
       points: [0, [Validators.required, Validators.min(0)]],
-      specialOffers: [[]]
+      special_offers: [[]]
     });
 
     this.route.params.subscribe(params => {
