@@ -34,8 +34,8 @@ export class RestaurantFormComponent implements OnInit {
       name: ['', Validators.required],
       address: ['', Validators.required],
       city: ['', Validators.required],
-      openingHours: ['', Validators.required],
-      specialOffers: [[]]
+      opening_hours: ['', Validators.required],
+      special_offers: [[]]
     });
 
     this.route.params.subscribe(p => {

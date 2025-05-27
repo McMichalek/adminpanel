@@ -3,22 +3,17 @@
 
   <form [formGroup]="form" (ngSubmit)="save()">
     <div class="form-group">
-      <label for="dishId">Danie</label>
-      <select id="dishId" formControlName="dishId">
+      <label for="dish_id">Danie</label>
+      <select id="dish_id" formControlName="dish_id">
         <option [value]="null" disabled>-- wybierz danie --</option>
         <option *ngFor="let d of allDishes" [value]="d.id">{{ d.name }}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="name">Nazwa promocji</label>
-      <input type="text" id="name" formControlName="name" />
-    </div>
-
-    <div class="form-group">
-      <label for="specialPrice">Cena promocyjna</label>
-      <input type="number" id="specialPrice" formControlName="specialPrice" min="0.01" step="0.01" />
-      <div class="error" *ngIf="form.get('specialPrice')?.invalid && form.get('specialPrice')?.touched">
+      <label for="special_price">Cena promocyjna</label>
+      <input type="number" id="special_price" formControlName="special_price" min="0.01" step="0.01" />
+      <div class="error" *ngIf="form.get('special_price')?.invalid && form.get('special_price')?.touched">
         Cena musi być większa od zera.
       </div>
     </div>

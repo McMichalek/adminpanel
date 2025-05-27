@@ -32,14 +32,14 @@ ngOnInit() {
   ]).pipe(
     map(([orders, users, dishes]) => orders.map(o => ({
       ...o,
-      userName: users.find(u => u.id === o.userId)?.email || 'Nieznany',
-      dishNames: Object.entries(o.orderItems)
+      userName: users.find(u => u.id === o.user_id)?.email || 'Nieznany',
+      dishNames: Object.entries(o.order_items)
         .map(([dishId, qty]) => {
           const dish = dishes.find(d => d.id === dishId);
           return dish ? `${dish.name} × ${qty}` : '';
         })
         .filter(Boolean)
-    })))
+          })))
   );
 }
 

@@ -14,6 +14,7 @@
         <th>ID</th>
         <th>Nazwa</th>
         <th>Adres</th>
+        <th>Miasto</th>
         <th>Godziny</th>
         <th>Akcje</th>
       </tr>
@@ -23,7 +24,8 @@
         <td>{{ r.id }}</td>
         <td>{{ r.name }}</td>
         <td>{{ r.address }}</td>
-        <td>{{ r.openingHours }}</td>
+        <td>{{ r.city }}</td>
+        <td>{{ r.opening_hours }}</td>
         <td>
           <button class="btn-edit" [routerLink]="['/admin/restaurants', r.id, 'edit']">Edytuj</button>
           <button class="btn-delete" (click)="delete(r.id)">Usuń</button>

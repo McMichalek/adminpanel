@@ -8,15 +8,15 @@ export type OrderStatus =
 
 export interface Order {
   id: string;
-  userId: string;
-  orderItems: { [dishId: string]: number };
-  totalPrice: number;
-  totalPriceIncludingSpecialOffers: number;
+  user_id: string;
+  order_items: { [dish_id: string]: number };
+  total_price: number;
+  total_price_including_special_offers: number;
   status: OrderStatus;
-  pointsUsed: number;
-  pointsGained: number;
-  createdAt: string;
-  updatedAt: string;
-  restaurantId: string;
-  paymentMethod: string;
+  points_used: number;
+  points_gained: number;
+  created_at: string; 
+  updated_at: string; 
+  restaurant_id: string;
+  payment_method: string;
 }

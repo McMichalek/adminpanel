@@ -14,12 +14,12 @@ import { Dish } from '../../../models/dish.model';
   templateUrl: './promotion-form.component.html',
   styleUrls: ['./promotion-form.component.css'],
 })
+// ...existing imports...
 export class PromotionFormComponent implements OnInit {
   form!: FormGroup;
   editId?: string;
   editPromotion?: Promotion;
   editOldDishId?: string;
-  editOldName?: string;
   allDishes: Dish[] = [];
 
   constructor(
@@ -35,9 +35,8 @@ export class PromotionFormComponent implements OnInit {
     });
 
     this.form = this.fb.group({
-      dishId: [null, Validators.required],
-      name: ['', Validators.required],
-      specialPrice: [0, [Validators.required, Validators.min(0.01)]]
+      dish_id: [null, Validators.required],
+      special_price: [0, [Validators.required, Validators.min(0.01)]]
     });
 
     this.route.params.subscribe(params => {
@@ -45,12 +44,11 @@ export class PromotionFormComponent implements OnInit {
         this.editId = params['id'];
         this.admin.getPromotions().subscribe(promos => {
           const promo = promos.find(
-            p => p.dishId === params['id']
+            p => p.dish_id === params['id']
           );
           if (promo) {
             this.editPromotion = promo;
-            this.editOldDishId = promo.dishId;
-            this.editOldName = promo.name;
+            this.editOldDishId = promo.dish_id;
             this.form.patchValue(promo);
           }
         });
@@ -63,8 +61,7 @@ export class PromotionFormComponent implements OnInit {
     if (this.editPromotion) {
       this.admin.updatePromotion(
         data,
-        this.editOldDishId ?? data.dishId,
-        this.editOldName ?? data.name
+        this.editOldDishId ?? data.dish_id
       );
     } else {
       this.admin.addPromotion(data);
