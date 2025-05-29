@@ -18,8 +18,8 @@ export class AdminService {
   constructor(private authService: AuthService) {
     // Mockowe dane startowe:
     this.promotions$.next([
-      { dishId: '1', name: '10% Off', specialPrice: 18 },
-      { dishId: '3', name: '20% Off', specialPrice: 14.4 }
+      { dish_id: '1', name: '10% Off', special_price: 18 },
+      { dish_id: '3', name: '20% Off', special_price: 14.4 }
     ]);
 
     this.restaurants$.next([
@@ -28,32 +28,32 @@ export class AdminService {
     ]);
 
     this.users$.next([
-      { id: '1', email: 'alice@example.com', role: 'customer', points: 50, specialOffers: ['1'] },
-      { id: '2', email: 'bob@example.com', role: 'worker', restaurantId: '1', points: 80, specialOffers: [] },
-      { id: '3', email: 'carol@example.com', role: 'worker', restaurantId: '2', points: 30, specialOffers: ['2'] }
+      { id: '1', email: 'alice@example.com', role: 'customer', points: 50, special_offers: ['1'] },
+      { id: '2', email: 'bob@example.com', role: 'worker', restaurant_id: '1', points: 80, special_offers: [] },
+      { id: '3', email: 'carol@example.com', role: 'worker', restaurant_id: '2', points: 30, special_offers: ['2'] }
     ]);
 
     this.dishes$.next([
-      { id: '1', name: 'Margherita', description: 'Klasyczna pizza', ingredients: 'ser, sos pomidorowy, bazylia', price: 20, points: 10 },
-      { id: '2', name: 'Pepperoni', description: 'Pizza z pepperoni', ingredients: 'ser, sos pomidorowy, pepperoni', price: 25, points: 12 },
-      { id: '3', name: 'Cheeseburger', description: 'Burger z cheddarem', ingredients: 'wołowina, cheddar, bułka', price: 18, points: 8 },
-      { id: '4', name: 'Vegan Burger', description: 'Roślinny burger', ingredients: 'kotlet roślinny, warzywa, bułka', price: 20, points: 9 }
+      { id: '1',restaurant_id:'1', name: 'Margherita', description: 'Klasyczna pizza', ingredients: 'ser, sos pomidorowy, bazylia', price: 20, points: 10 },
+      { id: '2',restaurant_id:'1', name: 'Pepperoni', description: 'Pizza z pepperoni', ingredients: 'ser, sos pomidorowy, pepperoni', price: 25, points: 12 },
+      { id: '3',restaurant_id:'2', name: 'Cheeseburger', description: 'Burger z cheddarem', ingredients: 'wołowina, cheddar, bułka', price: 18, points: 8 },
+      { id: '4',restaurant_id:'2', name: 'Vegan Burger', description: 'Roślinny burger', ingredients: 'kotlet roślinny, warzywa, bułka', price: 20, points: 9 }
     ]);
 
     this.orders$.next([
       {
         id: '1',
-        userId: '1',
-        restaurantId: '1',
-        orderItems: { '1': 1, '2': 2 },
-        totalPrice: 43,
-        totalPriceIncludingSpecialOffers: 43,
+        user_id: '1',
+        restaurant_id: '1',
+        order_items: { '1': 1, '2': 2 },
+        total_price: 43,
+        total_price_including_special_offers: 43,
         status: 'checkout',
-        pointsUsed: 0,
-        pointsGained: 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        paymentMethod: 'cash'
+        points_used: 0,
+        points_gained: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        payment_method: 'cash'
       }
     ]);
   }
@@ -75,7 +75,7 @@ export class AdminService {
     const restaurant = this.restaurants$.value.find(r => r.id === restId);
     const allowedDishIds = restaurant?.specialOffers || [];
     return this.dishes$.asObservable().pipe(
-      map(list => list.filter(d => allowedDishIds.includes(d.id)))
+      map(list => list.filter(d => allowedDishIds.includes(d.restaurant_id)))
     );
 
     // === FIREBASE === (Firestore)
@@ -87,7 +87,7 @@ export class AdminService {
     const restaurant = this.restaurants$.value.find(r => r.id === restId);
     const allowedDishIds = restaurant?.specialOffers || [];
     return this.promotions$.asObservable().pipe(
-      map(list => list.filter(p => allowedDishIds.includes(p.dishId)))
+      map(list => list.filter(p => allowedDishIds.includes(p.dish_id)))
     );
 
     // === FIREBASE ===
@@ -97,7 +97,7 @@ export class AdminService {
   getOrders(): Observable<Order[]> {
     const restId = this.authService.getRestaurantId();
     return this.orders$.asObservable().pipe(
-      map(list => list.filter(o => o.restaurantId === restId))
+      map(list => list.filter(o => o.restaurant_id === restId))
     );
 
     // === FIREBASE ===
@@ -109,9 +109,9 @@ export class AdminService {
     return this.users$.asObservable().pipe(
       map(list => {
         if (this.authService.getRole() === 'admin') {
-          return list.filter(u => u.restaurantId === restId || u.role === 'customer');
+          return list.filter(u => u.restaurant_id === restId || u.role === 'customer');
         } else if (this.authService.getRole() === 'worker') {
-          return list.filter(u => u.restaurantId === restId);
+          return list.filter(u => u.restaurant_id === restId);
         }
         return [];
       })
@@ -205,18 +205,18 @@ export class AdminService {
     this.promotions$.next([...this.promotions$.value, p]);
   }
 
-  updatePromotion(newPromo: Promotion, oldDishId: string, oldName: string) {
+  updatePromotion(newPromo: Promotion, oldDishId: string) {
     this.promotions$.next(
       this.promotions$.value.map(x =>
-        x.dishId === oldDishId && x.name === oldName ? newPromo : x
+        x.dish_id === oldDishId ? newPromo : x
       )
     );
   }
 
-  deletePromotion(dishId: string, name: string) {
+  deletePromotion(dishId: string) {
     this.promotions$.next(
       this.promotions$.value.filter(x =>
-        !(x.dishId === dishId && x.name === name)
+        !(x.dish_id === dishId)
       )
     );
   }
