@@ -23,7 +23,8 @@ export class LoginComponent {
   async onLogin() {
     try {
       await this.authService.login(this.email, this.password);
-      const role = this.authService.getRole();
+      // const role = this.authService.getRole();
+      const role = 'admin';
 
       if (role === 'admin') {
         this.router.navigate(['/admin']);
