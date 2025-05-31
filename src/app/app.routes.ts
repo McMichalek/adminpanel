@@ -31,6 +31,27 @@ export const routes: Routes = [
       import('./admin/components/order/order.component').then(m => m.OrdersComponent)
   },
 
+  {
+    path: 'opinions',
+    loadComponent: () =>
+      import('./admin/components/opinion/opinion.component').then(m => m.OpinionsComponent
+      )
+  },
+
+  {
+    path: 'restaurants',
+    loadComponent: () =>
+      import('./admin/components/restaurant/restaurant.component').then(m => m.RestaurantsComponent),
+  },
+
+  {
+    path: 'special-offers',
+    loadComponent: () =>
+      import('./admin/components/special-offer/special-offer.component').then(
+        (m) => m.SpecialOffersComponent
+      ),
+  },
+
   // 5) Jeśli ktoś wpisze dowolną nieobsługiwaną ścieżkę → przekieruj na /login
   { path: '**', redirectTo: 'login' }
 ];
