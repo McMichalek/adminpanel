@@ -27,7 +27,7 @@ export class LoginComponent {
       const role = 'admin';
 
       if (role === 'admin') {
-        this.router.navigate(['/admin']);
+        this.router.navigate(['/']);
       } else {
         this.errorMessage = 'Tylko administrator ma dostęp do panelu.';
         await this.authService.logout();
