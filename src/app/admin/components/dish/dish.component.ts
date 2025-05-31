@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DishService } from '../../services/dish.service';
-import { Dish } from '../../../models/dish.model';
+import { Dish } from '../../models/dish.model';
 
 @Component({
-  selector: 'app-dish-panel',
-  templateUrl: './dish-panel.component.html',
+  selector: 'app-dish',
+  templateUrl: './dish.component.html',
   standalone: true,
-  styleUrls: ['./dish-panel.component.scss']
+  styleUrls: ['./dish.component.css']
 })
 export class DishPanelComponent implements OnInit {
   public dishes: Dish[] = [];

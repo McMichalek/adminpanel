@@ -17,5 +17,4 @@ export interface Dish {
   stockCount: number;
   /** Flaga dostępności dania */
   isAvailable: boolean;
-  restaurant_id?: "1";
 }

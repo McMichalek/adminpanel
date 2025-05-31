@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { Dish } from '../../models/dish.model';
+import { Dish } from '../models/dish.model';
 import { AuthService } from './auth.service';
 // import { environment } from '../../environments/environment';
 
