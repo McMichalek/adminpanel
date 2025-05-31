@@ -7,7 +7,15 @@ export const routes: Routes = [
   {
     path: 'admin',
     children: [
-      // ekran logowania
+      // poniżej dobre
+      {
+        path: 'dish',
+        loadComponent: () =>
+          import('./admin/components/dish/dish.component').then(m => m.DishPanelComponent)
+      },
+
+      // stare wersje doł
+
       {
         path: 'login',
         loadComponent: () =>
@@ -43,11 +51,11 @@ export const routes: Routes = [
               import('./admin/components/restaurant-form/restaurant-form.component').then(m => m.RestaurantFormComponent)
           },
           // dania
-          {
-            path: 'dishes',
-            loadComponent: () =>
-              import('./admin/components/dish-list/dish-list.component').then(m => m.DishListComponent)
-          },
+          // {
+          //   path: 'dishes',
+          //   loadComponent: () =>
+          //     import('./admin/components/dish-list/dish-list.component').then(m => m.DishListComponent)
+          // },
           {
             path: 'dishes/new',
             loadComponent: () =>

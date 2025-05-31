@@ -57,7 +57,8 @@ export class LoginComponent {
 // }
 
 
-//
+// WZOR NA PROJEKT MEDAPP
+
 // import { Component } from '@angular/core';
 // import {FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule} from '@angular/forms';
 // import { LoginService } from '../../services/login.service';
