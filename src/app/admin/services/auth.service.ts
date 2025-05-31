@@ -7,15 +7,12 @@ import {
   getIdTokenResult,
   User
 } from '@angular/fire/auth';
-import { AppCheck, getToken, AppCheckTokenResult } from '@angular/fire/app-check';
+import { getToken } from '@angular/fire/app-check';
 import { BehaviorSubject } from 'rxjs';
 
 export interface UserTokens {
-  /** ID Token Firebase Authentication */
+
   idToken: string;
-  /** App Check Token */
-  appCheckToken: string;
-  /** UID zalogowanego użytkownika */
   uid: string;
 }
 
@@ -30,7 +27,6 @@ export class AuthService {
 
   constructor(
     private auth: Auth,
-    private appCheck: AppCheck
   ) {
     // Nasłuchiwanie zmiany stanu zalogowania
     onAuthStateChanged(this.auth, async (user) => {
@@ -39,7 +35,8 @@ export class AuthService {
       if (user) {
         // Pobranie tokena z niestandardowymi claimami
         const tokenResult = await getIdTokenResult(user);
-        this.role = (tokenResult.claims['role'] as string) || null;
+      //  this.role = (tokenResult.claims['role'] as string) || null;
+      this.role="admin";
         this.restaurantId = (tokenResult.claims['restaurant_id'] as string) || null;
         this.userId = user.uid;
       } else {
@@ -93,23 +90,15 @@ export class AuthService {
       throw new Error('Brak zalogowanego użytkownika'); // odpowiada Twojemu warunkowi w kodzie Dart
     }
 
-    // 2) Pobierz ID Token (string)
-    //    Możesz tu użyć user.getIdToken(), ale z importów AngularFire wygodniej jest getIdTokenResult,
-    //    jeśli potrzebujesz dodatkowych informacji – tutaj jednak wyciągamy tylko token:
+
     const idToken = await user.getIdToken();
 
-    // 3) Pobierz App Check Token (string)
-    //    Używamy getToken(this.appCheck), false = nie wymuszaj odświeżenia,
-    //    jeśli token jest wciąż ważny.
-    const appCheckResult: AppCheckTokenResult = await getToken(this.appCheck, /* forceRefresh = */ false);
-    const appCheckToken = appCheckResult.token;
 
     // 4) UID użytkownika
     const uid = user.uid;
 
     return {
       idToken,
-      appCheckToken,
       uid
     };
   }

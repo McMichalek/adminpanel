@@ -1,57 +1,61 @@
 import { Routes } from '@angular/router';
+import { AdminGuard } from './admin/guards/admin.guard';
 
 export const routes: Routes = [
-  // 1) Gdy ktoś wejdzie na „/”, od razu przekierowujemy do „/login”
+
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // 2) Ekran logowania: dostępny pod „/login”
+
   {
     path: 'login',
     loadComponent: () =>
       import('./admin/components/login/login.component').then(m => m.LoginComponent)
   },
 
-  // 3) Panel dań: dostępny pod „/dish”
+
   {
     path: 'dish',
     loadComponent: () =>
-      import('./admin/components/dish/dish.component').then(m => m.DishPanelComponent)
+      import('./admin/components/dish/dish.component').then(m => m.DishPanelComponent),
+    canActivate: [AdminGuard]
   },
-
-  // 4) Ekran „brak uprawnień”: dostępny pod „/unauthorized”
-  {
-    path: 'unauthorized',
-    loadComponent: () =>
-      import('./admin/components/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
-  },
-
   {
     path: 'orders',
     loadComponent: () =>
-      import('./admin/components/order/order.component').then(m => m.OrdersComponent)
+      import('./admin/components/order/order.component').then(m => m.OrdersComponent),
+    canActivate: [AdminGuard]
   },
 
   {
     path: 'opinions',
     loadComponent: () =>
-      import('./admin/components/opinion/opinion.component').then(m => m.OpinionsComponent
-      )
+      import('./admin/components/opinion/opinion.component').then(m => m.OpinionsComponent),
+    canActivate: [AdminGuard]
   },
+
 
   {
     path: 'restaurants',
     loadComponent: () =>
       import('./admin/components/restaurant/restaurant.component').then(m => m.RestaurantsComponent),
+    canActivate: [AdminGuard]
   },
 
   {
     path: 'special-offers',
     loadComponent: () =>
-      import('./admin/components/special-offer/special-offer.component').then(
-        (m) => m.SpecialOffersComponent
-      ),
+      import('./admin/components/special-offer/special-offer.component').then(m => m.SpecialOffersComponent),
+    canActivate: [AdminGuard]
   },
 
-  // 5) Jeśli ktoś wpisze dowolną nieobsługiwaną ścieżkę → przekieruj na /login
-  { path: '**', redirectTo: 'login' }
+
+  {
+    path: 'unauthorized',
+    loadComponent: () =>
+      import('./admin/components/unauthorized/unauthorized.component').then(
+        m => m.UnauthorizedComponent
+      )
+  },
+
+  { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];

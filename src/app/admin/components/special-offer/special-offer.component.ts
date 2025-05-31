@@ -112,13 +112,15 @@ import { SpecialOfferService } from '../../services/special-offer.service';
             <td>{{ o.name }}</td>
             <td>{{ o.special_price | number: '1.2-2' }}</td>
             <td>
-              <!-- Edycja ceny -->
+              <!-- Edycja ceny 
               <button
                 class="btn btn-sm btn-warning me-2"
                 (click)="startEdit(o)"
               >
+                
                 Edytuj cenę
               </button>
+              -->
               <!-- Usuwanie oferty -->
               <button
                 class="btn btn-sm btn-danger me-2"
@@ -261,7 +263,7 @@ export class SpecialOffersComponent implements OnInit {
    * Rozpocznij edycję danej oferty: wypełnij pole do zmiany ceny.
    * Ukrywamy pola dish_id i name (po utworzeniu nie zmieniamy ich).
    */
-  startEdit(o: SpecialOffer): void {
+  /*startEdit(o: SpecialOffer): void {
     this.isEditMode = true;
     this.editId = o.id;
     this.form = {
@@ -269,7 +271,7 @@ export class SpecialOffersComponent implements OnInit {
     };
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
+*/
   /**
    * Anuluje tryb edycji i czyści formularz.
    */
