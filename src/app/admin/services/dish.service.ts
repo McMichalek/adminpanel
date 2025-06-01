@@ -1,106 +1,49 @@
+// src/app/services/dish.service.ts
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, from } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-
-import { Dish } from '../models/dish.model';
-import { AuthService } from './auth.service';
-// import { environment } from '../../environments/environment';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Dish, DishCreate, DishUpdate } from '../models/dish.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DishService {
   /**
-   * Bazowy URL do endpointów FastAPI
-   * Zakładam, że w environment masz coś w stylu:
-   *   apiUrl: 'https://twoj-backend.example.com'
-   * Jeśli nie masz, możesz zamienić na pusty string lub konkretną ścieżkę.
+   * Załóżmy, że Twój FastAPI ma prefix np. /dish/panel.
+   * Dostosuj baseUrl do faktycznego endpointu backendu.
    */
-  // private readonly baseUrl = `${environment.apiUrl}/dish/panel`;
-  private readonly baseUrl = "localhost80/dish/panel";
+  private baseUrl = 'http://localhost:80/dish/panel';
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) {}
+  constructor(private http: HttpClient) {}
 
-  /**
-   * Pomocnicza metoda zwracająca nagłówki z poprawnym Bearer Tokenem
-   * Pobiera token z AuthService.getUserToken(), który zwraca obiekt zawierający m.in. idToken.
-   */
-  private getAuthHeaders(): Observable<HttpHeaders> {
-    return from(this.authService.getUserToken()).pipe(
-      switchMap(tokens => {
-        const headers = new HttpHeaders({
-          Authorization: `Bearer ${tokens.idToken}`,
-        });
-        return new Observable<HttpHeaders>(subscriber => {
-          subscriber.next(headers);
-          subscriber.complete();
-        });
-      })
-    );
+  /** GET /dish/panel/all – pobierz wszystkie dania */
+  getAllDishes(): Observable<Dish[]> {
+    const url = `${this.baseUrl}/all`;
+    return this.http.get<Dish[]>(url);
   }
 
-  /**
-   * Pobiera dane dania o podanym ID.
-   * Zwraca Observable<Dish>.
-   */
+  /** GET /dish/panel/{id} – pobierz dane jednego dania */
   getDishById(dishId: string): Observable<Dish> {
-    return this.getAuthHeaders().pipe(
-      switchMap(headers =>
-        this.http.get<Dish>(`${this.baseUrl}/get_dish_by_id/${dishId}`, { headers })
-      )
-    );
+    const url = `${this.baseUrl}/${dishId}`;
+    return this.http.get<Dish>(url);
   }
 
-  /**
-   * Listuje wszystkie dostępne dania.
-   * Zwraca Observable<Dish[]>.
-   */
-  listDishes(): Observable<Dish[]> {
-    return this.getAuthHeaders().pipe(
-      switchMap(headers =>
-        this.http.get<Dish[]>(`${this.baseUrl}/list_dishes`, { headers })
-      )
-    );
+  /** POST /dish/panel/create – utwórz nowe danie */
+  createDish(data: DishCreate): Observable<Dish> {
+    const url = `${this.baseUrl}/create`;
+    return this.http.post<Dish>(url, data);
   }
 
-  /**
-   * Dodaje nowe danie do bazy.
-   * Zwraca Observable<Dish> z utworzonym obiektem (wraz z wygenerowanym ID).
-   */
-  addDish(newDish: Dish): Observable<Dish> {
-    return this.getAuthHeaders().pipe(
-      switchMap(headers =>
-        this.http.post<Dish>(`${this.baseUrl}/add_dish`, newDish, { headers })
-      )
-    );
+  /** PUT /dish/panel/update/{id} – zaktualizuj dane dania */
+  updateDish(dishId: string, data: DishUpdate): Observable<Dish> {
+    const url = `${this.baseUrl}/update/${dishId}`;
+    return this.http.put<Dish>(url, data);
   }
 
-  /**
-   * Aktualizuje istniejące danie o podanym ID.
-   * Zwraca Observable<Dish> z zaktualizowanymi danymi.
-   */
-  updateDish(dishId: string, updatedDish: Dish): Observable<Dish> {
-    return this.getAuthHeaders().pipe(
-      switchMap(headers =>
-        this.http.put<Dish>(`${this.baseUrl}/update_dish/${dishId}`, updatedDish, { headers })
-      )
-    );
-  }
-
-  /**
-   * Usuwa danie o podanym ID.
-   * Zwraca Observable<any> (może zawierać wiadomość o sukcesie).
-   */
-  deleteDish(dishId: string): Observable<any> {
-    return this.getAuthHeaders().pipe(
-      switchMap(headers =>
-        this.http.delete<any>(`${this.baseUrl}/delete_dish/${dishId}`, { headers })
-      )
-    );
+  /** DELETE /dish/panel/delete/{id} – usuń danie */
+  deleteDish(dishId: string): Observable<{ message: string }> {
+    const url = `${this.baseUrl}/delete/${dishId}`;
+    return this.http.delete<{ message: string }>(url);
   }
 }

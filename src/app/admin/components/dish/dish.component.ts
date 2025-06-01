@@ -1,98 +1,144 @@
+// src/app/components/dish/dish.component.ts
+
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { Dish, DishCreate, DishUpdate } from '../../models/dish.model';
 import { DishService } from '../../services/dish.service';
-import { Dish } from '../../models/dish.model';
 
 @Component({
-  selector: 'app-dish',
-  templateUrl: './dish.component.html',
+  selector: 'app-dish-panel',
   standalone: true,
-  styleUrls: ['./dish.component.css']
+  imports: [CommonModule, FormsModule],
+  templateUrl: './dish.component.html',
+  styleUrls: ['./dish.component.css'],
 })
 export class DishPanelComponent implements OnInit {
   public dishes: Dish[] = [];
-  public selectedDish?: Dish;
-  public errorMessage: string = '';
+  public loading = false;
+  public error: string | null = null;
+
+  /** Formularz tworzenia – zawsze wymagane name, description, price (category opcjonalnie) */
+  public createForm: DishCreate = {
+    name: '',
+    description: '',
+    price: 0,
+    category: '',
+  };
+
+  /** Formularz edycji – pola opcjonalne; przed edycją wypełnimy go konkretnymi wartościami */
+  public updateForm: DishUpdate = {};
+
+  public isEditMode = false;
+  private editId: string | null = null;
 
   constructor(private dishService: DishService) {}
 
   ngOnInit(): void {
-    this.loadAllDishes();
+    this.fetchAllDishes();
   }
 
-  loadAllDishes(): void {
-    this.dishService.listDishes().subscribe({
-      next: (result: Dish[]) => {
-        this.dishes = result;
+  /** Pobierz wszystkie dania z backendu */
+  fetchAllDishes(): void {
+    this.loading = true;
+    this.error = null;
+    this.dishes = [];
+
+    this.dishService.getAllDishes().subscribe({
+      next: (data) => {
+        this.dishes = data;
+        this.loading = false;
       },
       error: (err) => {
-        this.errorMessage = `Nie udało się pobrać listy dań: ${err.message || err.statusText}`;
-      }
+        console.error(err);
+        this.error = 'Błąd podczas pobierania listy dań.';
+        this.loading = false;
+      },
     });
   }
 
-  loadDishDetail(id: string): void {
-    this.dishService.getDishById(id).subscribe({
-      next: (dish: Dish) => {
-        this.selectedDish = dish;
-      },
-      error: (err) => {
-        this.errorMessage = `Nie udało się pobrać dania: ${err.message || err.statusText}`;
-      }
-    });
+  /** Obsługa przycisku „Zapisz” w formularzu (tryb tworzenie lub edycja) */
+  onSubmit(): void {
+    this.error = null;
+
+    if (this.isEditMode && this.editId) {
+      // Tryb edycji: wysyłamy tylko te pola, które użytkownik zmienił (updateForm)
+      this.dishService.updateDish(this.editId, this.updateForm).subscribe({
+        next: (updatedDish) => {
+          // Zaktualizuj w tablicy
+          const idx = this.dishes.findIndex((d) => d.id === this.editId);
+          if (idx !== -1) {
+            this.dishes[idx] = updatedDish;
+          }
+          this.resetForm();
+        },
+        error: (err) => {
+          console.error(err);
+          this.error = 'Błąd podczas aktualizacji dania.';
+        },
+      });
+    } else {
+      // Tryb tworzenia: musimy przekazać createForm (wszystkie wymagane pola)
+      this.dishService.createDish(this.createForm).subscribe({
+        next: (createdDish) => {
+          // Dodajemy nowo utworzone danie na początek listy
+          this.dishes.unshift(createdDish);
+          this.resetForm();
+        },
+        error: (err) => {
+          console.error(err);
+          this.error = 'Błąd podczas tworzenia nowego dania.';
+        },
+      });
+    }
   }
 
-  createNewDish(): void {
-    const newDish: Dish = {
-      id: '', // w addDish nie uwzględniamy pola id, backend wygeneruje
-      name: 'Nowe Danie',
-      description: 'Opis nowego dania',
-      price: 30,
-      ingredients: 'składniki...',
-      points: 5,
-      stockCount: 20,
-      isAvailable: true
-      // promoPrice?: number
+  /** Rozpocznij edycję – wypełnij updateForm danymi wybranego dania */
+  startEdit(d: Dish): void {
+    this.isEditMode = true;
+    this.editId = d.id;
+    this.updateForm = {
+      name: d.name,
+      description: d.description,
+      price: d.price,
+      category: d.category,
     };
+    // Przewiń do góry/ do formularza
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-    this.dishService.addDish(newDish).subscribe({
-      next: (created: Dish) => {
-        console.log('Dodano danie:', created);
-        this.loadAllDishes();
+  /** Anuluj tryb edycji, wyczyść formularze */
+  cancelEdit(): void {
+    this.resetForm();
+  }
+
+  /** Usuń danie po ID (z potwierdzeniem) */
+  onDelete(dishId: string): void {
+    if (!confirm('Na pewno usunąć to danie?')) {
+      return;
+    }
+    this.dishService.deleteDish(dishId).subscribe({
+      next: (_) => {
+        this.dishes = this.dishes.filter((d) => d.id !== dishId);
       },
       error: (err) => {
-        this.errorMessage = `Nie udało się dodać dania: ${err.message || err.statusText}`;
-      }
+        console.error(err);
+        this.error = 'Błąd podczas usuwania dania.';
+      },
     });
   }
 
-  updateExistingDish(): void {
-    if (!this.selectedDish) return;
-
-    const updated: Dish = {
-      ...this.selectedDish,
-      price: this.selectedDish.price + 5 // przykładowa zmiana
+  /** Reset wszystkich formularzy i trybu edycji */
+  private resetForm(): void {
+    this.isEditMode = false;
+    this.editId = null;
+    this.createForm = {
+      name: '',
+      description: '',
+      price: 0,
+      category: '',
     };
-
-    this.dishService.updateDish(updated.id, updated).subscribe({
-      next: (res: Dish) => {
-        console.log('Zaktualizowano danie:', res);
-        this.loadAllDishes();
-      },
-      error: (err) => {
-        this.errorMessage = `Nie udało się zaktualizować dania: ${err.message || err.statusText}`;
-      }
-    });
-  }
-
-  deleteDishById(id: string): void {
-    this.dishService.deleteDish(id).subscribe({
-      next: () => {
-        console.log('Usunięto danie o ID:', id);
-        this.loadAllDishes();
-      },
-      error: (err) => {
-        this.errorMessage = `Nie udało się usunąć dania: ${err.message || err.statusText}`;
-      }
-    });
+    this.updateForm = {};
   }
 }
