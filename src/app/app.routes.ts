@@ -1,18 +1,21 @@
 import { Routes } from '@angular/router';
 import { AdminGuard } from './admin/guards/admin.guard';
+import {AdminDashboardComponent} from './admin/components/admin-dashboard/admin-dashboard.component';
 
 export const routes: Routes = [
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-
 
   {
     path: 'login',
     loadComponent: () =>
       import('./admin/components/login/login.component').then(m => m.LoginComponent)
   },
-
-
+  {
+    path: 'admin',
+    component: AdminDashboardComponent, // bo standalone: true, możemy użyć „component”
+    canActivate: [AdminGuard]
+  },
   {
     path: 'dish',
     loadComponent: () =>
@@ -52,8 +55,7 @@ export const routes: Routes = [
   {
     path: 'unauthorized',
     loadComponent: () =>
-      import('./admin/components/unauthorized/unauthorized.component').then(
-        m => m.UnauthorizedComponent
+      import('./admin/components/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent
       )
   },
 
