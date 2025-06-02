@@ -1,19 +1,19 @@
 // src/app/services/dish.service.ts
 
-import { ComponentFactoryResolver, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Dish, DishCreate, DishUpdate } from '../models/dish.model';
-import { AuthService } from './auth.service'; // załóżmy, że to ścieżka do Twojego AuthService
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DishService {
   /**
-   * Zakładamy, że Twój FastAPI ma prefix /dish/panel.
-   * Dostosuj baseUrl do faktycznego endpointu backendu.
+   * Base URL do FastAPI:
+   * Backend nasłuchuje na /dish/panel, a port to 80.
    */
   private baseUrl = 'http://localhost:80/dish/panel';
 
@@ -22,12 +22,9 @@ export class DishService {
     private authService: AuthService
   ) {}
 
-  /** GET /dish/panel/all – pobierz wszystkie dania z nagłówkiem Bearer */
+  /** GET /dish/panel/list_dishes – pobierz wszystkie dania */
   getAllDishes(): Observable<Dish[]> {
     const url = `${this.baseUrl}/list_dishes`;
-    console.log(url);
-    // 1) Zamieniamy promise na Observable (from)
-    // 2) switchMap pobiera token i dopiero wtedy robi GET z odpowiednim headerem
     return from(this.authService.getUserToken()).pipe(
       switchMap(tokens => {
         const headers = new HttpHeaders().set(
@@ -39,9 +36,9 @@ export class DishService {
     );
   }
 
-  /** GET /dish/panel/{id} – pobierz dane jednego dania */
+  /** GET /dish/panel/get_dish_by_id/{dishId} – pobierz dane pojedynczego dania */
   getDishById(dishId: string): Observable<Dish> {
-    const url = `${this.baseUrl}/${dishId}`;
+    const url = `${this.baseUrl}/get_dish_by_id/${dishId}`;
     return from(this.authService.getUserToken()).pipe(
       switchMap(tokens => {
         const headers = new HttpHeaders().set(
@@ -53,9 +50,9 @@ export class DishService {
     );
   }
 
-  /** POST /dish/panel/create – utwórz nowe danie */
+  /** POST /dish/panel/add_dish – utwórz nowe danie (pole price) */
   createDish(data: DishCreate): Observable<Dish> {
-    const url = `${this.baseUrl}/create`;
+    const url = `${this.baseUrl}/add_dish`;
     return from(this.authService.getUserToken()).pipe(
       switchMap(tokens => {
         const headers = new HttpHeaders().set(
@@ -67,9 +64,9 @@ export class DishService {
     );
   }
 
-  /** PUT /dish/panel/update/{id} – zaktualizuj dane dania */
+  /** PUT /dish/panel/update_dish/{dishId} – zaktualizuj danie (pole price) */
   updateDish(dishId: string, data: DishUpdate): Observable<Dish> {
-    const url = `${this.baseUrl}/update/${dishId}`;
+    const url = `${this.baseUrl}/update_dish/${dishId}`;
     return from(this.authService.getUserToken()).pipe(
       switchMap(tokens => {
         const headers = new HttpHeaders().set(
@@ -81,9 +78,9 @@ export class DishService {
     );
   }
 
-  /** DELETE /dish/panel/delete/{id} – usuń danie */
+  /** DELETE /dish/panel/delete_dish/{dishId} – usuń danie */
   deleteDish(dishId: string): Observable<{ message: string }> {
-    const url = `${this.baseUrl}/delete/${dishId}`;
+    const url = `${this.baseUrl}/delete_dish/${dishId}`;
     return from(this.authService.getUserToken()).pipe(
       switchMap(tokens => {
         const headers = new HttpHeaders().set(

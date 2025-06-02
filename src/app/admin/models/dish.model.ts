@@ -1,14 +1,24 @@
 // src/app/models/dish.model.ts
 
+/**
+ * Interfejs odpowiadający full Dish zwracanym/akceptowanym przez backend:
+ * - id: string
+ * - name: string
+ * - description: string
+ * - price: number
+ * - category?: string
+ */
 export interface Dish {
   id: string;
   name: string;
   description: string;
   price: number;
   category?: string;
-  [key: string]: any;
 }
 
+/**
+ * Payload do tworzenia nowego dania: tak, jak wymaga Pydantic: price (nie base_price).
+ */
 export interface DishCreate {
   name: string;
   description: string;
@@ -16,6 +26,9 @@ export interface DishCreate {
   category?: string;
 }
 
+/**
+ * Payload do aktualizacji: wszystkie pola poza id, a price zamiast base_price.
+ */
 export interface DishUpdate {
   name?: string;
   description?: string;
