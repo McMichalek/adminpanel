@@ -1,0 +1,25 @@
+<div class="restaurant-form">
+  <h2>{{ editId ? 'Edytuj' : 'Dodaj' }} restaurację</h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <label>
+      Nazwa:
+      <input type="text" formControlName="name" />
+    </label>
+
+    <label>
+      Adres:
+      <input type="text" formControlName="address" />
+    </label>
+
+    <label>
+      Godziny otwarcia:
+      <input type="text" formControlName="openingHours" />
+    </label>
+
+    <div class="button-group">
+      <button type="submit" [disabled]="form.invalid" class="btn-primary">Zapisz</button>
+      <button type="button" (click)="router.navigate(['/admin/restaurants'])" class="btn-secondary">Anuluj</button>
+    </div>
+  </form>
+</div>

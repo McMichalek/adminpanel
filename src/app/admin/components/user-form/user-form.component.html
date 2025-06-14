@@ -1,0 +1,33 @@
+<div class="user-form-container">
+  <div class="form-header">
+    <h2>{{ editId ? 'Edytuj' : 'Dodaj' }} użytkownika</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="user-form">
+    <div class="form-group">
+      <label>Imię i nazwisko</label>
+      <input type="text" formControlName="name" />
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" formControlName="email" />
+    </div>
+
+    <div class="form-group">
+      <label>Rola</label>
+      <select formControlName="role">
+        <option value="admin">Administrator</option>
+        <option value="worker">Pracownik</option>
+        <option value="customer">Użytkownik</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <!-- Zmieniona klasa na btn-primary -->
+      <button type="submit" [disabled]="form.invalid" class="btn-primary">Zapisz</button>
+      <!-- Zmieniona klasa na btn-secondary -->
+      <button type="button" (click)="router.navigate(['/admin/users'])" class="btn-secondary">Anuluj</button>
+    </div>
+  </form>
+</div>

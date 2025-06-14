@@ -1,0 +1,39 @@
+<div class="form-container">
+  <h2>{{ editId ? 'Edytuj' : 'Dodaj' }} zamówienie</h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <label>
+      Klient:
+      <select formControlName="userId">
+        <option [value]="null" disabled>-- wybierz użytkownika --</option>
+        <option *ngFor="let u of (users$ | async)" [value]="u.id">{{ u.name }}</option>
+      </select>
+    </label>
+
+    <label>
+      Restauracja:
+      <select formControlName="restaurantId">
+        <option [value]="null" disabled>-- wybierz restaurację --</option>
+        <option *ngFor="let r of (restaurants$ | async)" [value]="r.id">{{ r.name }}</option>
+      </select>
+    </label>
+
+    <label>
+      Dania:
+      <select formControlName="dishIds" multiple>
+        <option *ngFor="let d of filteredDishes" [value]="d.id">
+          {{ d.name }} ({{ getDisplayPrice(d.id) | currency:'PLN' }})
+        </option>
+      </select>
+    </label>
+
+    <div>
+      <strong>Cena całkowita:</strong> {{ totalPrice | currency:'PLN' }}
+    </div>
+
+    <div class="button-group">
+      <button type="submit" [disabled]="form.invalid" class="btn-primary">Zapisz</button>
+      <button type="button" (click)="router.navigate(['/admin/orders'])" class="btn-secondary">Anuluj</button>
+    </div>
+  </form>
+</div>

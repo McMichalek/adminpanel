@@ -1,0 +1,56 @@
+<div class="stock-list">
+  <!-- Nagłówek -->
+  <div class="header">
+    <button class="btn-back" routerLink="/admin">← Wstecz</button>
+    <h2>Magazyn</h2>
+    <!-- Przycisk "Dodaj" -->
+    <button class="btn-add" routerLink="/admin/stock/new">+ Dodaj</button>
+  </div>
+
+  <!-- Filtry -->
+  <div class="filter-container">
+    <label>
+      Filtruj po restauracji:
+      <select [(ngModel)]="selectedRestaurantId" (change)="filter()">
+        <option [value]="null">-- Wszystkie --</option>
+        <option *ngFor="let r of restaurants" [value]="r.id">{{ r.name }}</option>
+      </select>
+    </label>
+    <label>
+      Filtruj po daniu:
+      <select [(ngModel)]="selectedDishId" (change)="filter()">
+        <option [value]="null">-- Wszystkie --</option>
+        <option *ngFor="let d of dishes" [value]="d.id">{{ d.name }}</option>
+      </select>
+    </label>
+  </div><br />
+
+  <!-- Tabela -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Restauracja</th>
+        <th>Danie</th>
+        <th>Nazwa</th>
+        <th>Jednostka</th>
+        <th>Ilość</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of filteredStock">
+        <td>{{ s.id }}</td>
+        <td>{{ getRestaurantName(s.restaurantId) }}</td>
+        <td>{{ getDishName(s.dishId) }}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.unit }}</td>
+        <td>{{ s.quantity }}</td>
+        <td>
+          <button class="btn-edit" [routerLink]="['/admin/stock', s.id, 'edit']">Edytuj</button>
+          <button class="btn-delete" (click)="delete(s.id)">Usuń</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
