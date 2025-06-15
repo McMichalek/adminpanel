@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import {BehaviorSubject, Observable, map, of, combineLatest} from 'rxjs';
 import { Restaurant } from '../../models/restaurant.model';
 import { Dish } from '../../models/dish.model';
 import { Promotion } from '../../models/promotion.model';
@@ -16,53 +16,116 @@ export class AdminService {
   private orders$ = new BehaviorSubject<Order[]>([]);
 
   constructor(private authService: AuthService) {
-    // Mockowe dane startowe:
-    this.promotions$.next([
-      { dish_id: '1', name: '10% Off', special_price: 18 },
-      { dish_id: '3', name: '20% Off', special_price: 14.4 }
-    ]);
+    const now = new Date().toISOString();
 
-    this.restaurants$.next([
-      { id: '1', name: 'Pizza Place', city: 'Warszawa', address: 'Main St 1', openingHours: '10:00-22:00', specialOffers: ['1'] },
-      { id: '2', name: 'Burger Town', city: 'Kraków', address: 'High St 5', openingHours: '11:00-23:00', specialOffers: ['2'] }
-    ]);
+    const restaurantNames = [
+      { name: 'Złota Chochla', city: 'Warszawa', address: 'ul. Złota 10' },
+      { name: 'Smaczna Przystań', city: 'Kraków', address: 'ul. Rynek 5' },
+      { name: 'Burger Bazar', city: 'Wrocław', address: 'ul. Piastowska 7' },
+      { name: 'Pasta i Basta', city: 'Gdańsk', address: 'ul. Morska 12' },
+      { name: 'Kuchnia Babci Heli', city: 'Poznań', address: 'ul. Wiejska 1' }
+    ];
 
-    this.users$.next([
-      { id: '1', email: 'alice@example.com', role: 'customer', points: 50, special_offers: ['1'] },
-      { id: '2', email: 'bob@example.com', role: 'worker', restaurant_id: '1', points: 80, special_offers: [] },
-      { id: '3', email: 'carol@example.com', role: 'worker', restaurant_id: '2', points: 30, special_offers: ['2'] }
-    ]);
+    const restaurants: Restaurant[] = restaurantNames.map((r, i) => ({
+      id: `${i + 1}`,
+      name: r.name,
+      city: r.city,
+      address: r.address,
+      openingHours: '10:00-22:00',
+      specialOffers: []
+    }));
 
-    this.dishes$.next([
-      { id: '1',restaurant_id:'1', name: 'Margherita', description: 'Klasyczna pizza', ingredients: 'ser, sos pomidorowy, bazylia', price: 20, points: 10 },
-      { id: '2',restaurant_id:'1', name: 'Pepperoni', description: 'Pizza z pepperoni', ingredients: 'ser, sos pomidorowy, pepperoni', price: 25, points: 12 },
-      { id: '3',restaurant_id:'2', name: 'Cheeseburger', description: 'Burger z cheddarem', ingredients: 'wołowina, cheddar, bułka', price: 18, points: 8 },
-      { id: '4',restaurant_id:'2', name: 'Vegan Burger', description: 'Roślinny burger', ingredients: 'kotlet roślinny, warzywa, bułka', price: 20, points: 9 }
-    ]);
+    const dishNames = [
+      'Pierogi Ruskie', 'Burger Wołowy', 'Pizza Capricciosa',
+      'Spaghetti Carbonara', 'Schabowy z Ziemniakami', 'Sałatka Cezar',
+      'Zupa Pomidorowa', 'Kebab Klasyczny', 'Placki Ziemniaczane',
+      'Sushi Maki Mix', 'Naleśniki z Twarogiem', 'Wrap z Kurczakiem',
+      'Leczo Wegetariańskie', 'Gulasz Węgierski', 'Tatar z Łososia'
+    ];
 
-    this.orders$.next([
-      {
-        id: '1',
-        user_id: '1',
-        restaurant_id: '1',
-        order_items: { '1': 1, '2': 2 },
-        total_price: 43,
-        total_price_including_special_offers: 43,
+    const dishes: Dish[] = dishNames.map((name, i) => {
+      const restId = `${(i % restaurants.length) + 1}`;
+      return {
+        id: `${i + 1}`,
+        restaurant_id: restId,
+        name,
+        description: `Opis: ${name}`,
+        ingredients: 'składnik1, składnik2',
+        price: 15 + i,
+        points: i + 1
+      };
+    });
+
+    const promotions: Promotion[] = dishes
+      .filter((_, i) => i % 3 === 0)
+      .map(d => ({
+        dish_id: d.id,
+        name: `${d.name} PROMO`,
+        special_price: +(d.price * 0.85).toFixed(2)
+      }));
+
+    const users: User[] = [
+      { id: 'w1', email: 'worker1@test.com', role: 'worker', restaurant_id: ['1'], points: 20,special_offers: []  },
+      { id: 'w2', email: 'worker2@test.com', role: 'worker', restaurant_id: ['2'], points: 25,special_offers: []  },
+      { id: 'w3', email: 'worker3@test.com', role: 'worker', restaurant_id: ['3'], points: 30,special_offers: []  },
+      ...Array.from({ length: 5 }, (_, i) => ({
+        id: `c${i + 1}`,
+        email: `klient${i + 1}@mail.com`,
+        role: 'customer' as const,
+        points: i * 10,
+        special_offers: []
+      }))
+    ];
+
+    const orders: Order[] = Array.from({ length: 10 }, (_, i) => {
+      const dish = dishes[i];
+      const promo = promotions.find(p => p.dish_id === dish.id);
+      const price = promo?.special_price ?? dish.price;
+      return {
+        id: `${i + 1}`,
+        user_id: `c${(i % 5) + 1}`,
+        restaurant_id: dish.restaurant_id,
+        order_items: { [dish.id]: 1 },
+        total_price: price,
+        total_price_including_special_offers: price,
         status: 'checkout',
         points_used: 0,
-        points_gained: 0,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        payment_method: 'cash'
-      }
-    ]);
+        points_gained: 5,
+        created_at: now,
+        updated_at: now,
+        payment_method: 'card'
+      };
+    });
+
+    // Przypisz promocje do restauracji
+    restaurants.forEach(r => {
+      r.specialOffers = promotions
+        .filter(p => dishes.find(d => d.id === p.dish_id)?.restaurant_id === r.id)
+        .map(p => p.dish_id);
+    });
+
+    // Przypisanie do źródeł
+    this.restaurants$.next(restaurants);
+    this.dishes$.next(dishes);
+    this.promotions$.next(promotions);
+    this.users$.next(users);
+    this.orders$.next(orders);
   }
+
 
   // === MOCK === tylko restauracja użytkownika
   getRestaurants(): Observable<Restaurant[]> {
-    const restId = this.authService.getRestaurantId();
-    return this.restaurants$.asObservable().pipe(
-      map(rests => rests.filter(r => r.id === restId))
+    return combineLatest([
+      this.restaurants$.asObservable(),
+      this.authService.restaurantIdSubject.asObservable()
+    ]).pipe(
+      map(([restaurants, restIds]) => {
+        console.log('restIds:', restIds);
+        console.log('restaurants:', restaurants);
+        const filtered = restIds ? restaurants.filter(r => restIds.includes(r.id)) : [];
+        console.log('filtered:', filtered);
+        return filtered;
+      })
     );
   }
 
@@ -71,52 +134,67 @@ export class AdminService {
 
 
   getDishes(): Observable<Dish[]> {
-    const restId = this.authService.getRestaurantId();
-    const restaurant = this.restaurants$.value.find(r => r.id === restId);
-    const allowedDishIds = restaurant?.specialOffers || [];
-    return this.dishes$.asObservable().pipe(
-      map(list => list.filter(d => allowedDishIds.includes(d.restaurant_id)))
-    );
+    const restIds = this.authService.getRestaurantId();
+    if (!restIds) return of([]); // brak restauracji — brak dań
 
-    // === FIREBASE === (Firestore)
-    // return collectionData(query(collection(db, 'dishes'), where('restaurant_id', '==', restId)))
+    return this.dishes$.asObservable().pipe(
+      map(dishes => dishes.filter(d => restIds.includes(d.restaurant_id)))
+    );
   }
 
-  getPromotions(): Observable<Promotion[]> {
-    const restId = this.authService.getRestaurantId();
-    const restaurant = this.restaurants$.value.find(r => r.id === restId);
-    const allowedDishIds = restaurant?.specialOffers || [];
-    return this.promotions$.asObservable().pipe(
-      map(list => list.filter(p => allowedDishIds.includes(p.dish_id)))
-    );
 
-    // === FIREBASE ===
-    // return collectionData(query(collection(db, 'promotions'), where('restaurant_id', '==', restId)))
+
+  getPromotions(): Observable<Promotion[]> {
+    const restIds = this.authService.getRestaurantId();
+    if (!restIds) return of([]); // Brak ID – brak promocji
+    const allowedRestaurants = this.restaurants$.value.filter(r => restIds.includes(r.id));
+
+    // Zbierz wszystkie ID dań objętych promocjami
+    const allowedDishIds = this.dishes$.value
+      .filter(d => restIds.includes(d.restaurant_id))
+      .map(d => d.id);
+
+    // Przefiltruj promocje tylko dla tych dań
+    return this.promotions$.asObservable().pipe(
+      map(promos => promos.filter(p => allowedDishIds.includes(p.dish_id)))
+    );
   }
 
   getOrders(): Observable<Order[]> {
-    const restId = this.authService.getRestaurantId();
-    return this.orders$.asObservable().pipe(
-      map(list => list.filter(o => o.restaurant_id === restId))
-    );
+    const restIds = this.authService.getRestaurantId();
+    if (!restIds) return of([]); // Brak ID – brak zamówień
 
-    // === FIREBASE ===
-    // return collectionData(query(collection(db, 'orders'), where('restaurantId', '==', restId)))
+    return this.orders$.asObservable().pipe(
+      map(list => list.filter(o => restIds.includes(o.restaurant_id)))
+    );
   }
 
   getUsers(): Observable<User[]> {
-    const restId = this.authService.getRestaurantId();
+    const restIds = this.authService.getRestaurantId();
+    const role = this.authService.getRole();
+
     return this.users$.asObservable().pipe(
-      map(list => {
-        if (this.authService.getRole() === 'admin') {
-          return list.filter(u => u.restaurant_id === restId || u.role === 'customer');
-        } else if (this.authService.getRole() === 'worker') {
-          return list.filter(u => u.restaurant_id === restId);
+      map(users => {
+        if (!restIds) return [];
+
+        if (role === 'admin') {
+          return users.filter(user =>
+            user.role === 'customer' ||
+            (user.restaurant_id && user.restaurant_id.some(id => restIds.includes(id))) // pracownicy przypisani do restauracji admina
+          );
         }
+
+        if (role === 'worker') {
+          return users.filter(user =>
+            user.restaurant_id && user.restaurant_id.some(id => restIds.includes(id))
+          );
+        }
+
         return [];
       })
     );
   }
+
   //FIREBASE
   // getUsers(): Observable<User[]> {
   //   const restId = this.authService.getRestaurantId();
@@ -164,20 +242,34 @@ export class AdminService {
     const nextId = this.generateNextId(currentRestaurants);
     const newRestaurant: Restaurant = { ...r, id: nextId };
 
-    // 1. Dodaj restaurację
+    // 1. Dodaj restaurację do listy
     this.restaurants$.next([...currentRestaurants, newRestaurant]);
+    console.log('Nowy stan restaurants$', this.restaurants$.value);
 
-    // 2. Przypisz restaurantId użytkownikowi (adminowi)
+    // 2. Pobierz aktualnego użytkownika
     const userId = this.authService.getUserId();
     if (!userId) return;
 
-    const updatedUsers = currentUsers.map(user =>
-      user.id === userId ? { ...user, restaurantId: nextId } : user
-    );
+    // 3. Zaktualizuj restaurantId u użytkownika
+    const updatedUsers = currentUsers.map(user => {
+      if (user.id !== userId) return user;
+
+      const currentRestIds = user.restaurant_id ?? [];
+      const newIds = [...currentRestIds, nextId];
+
+      return {
+        ...user,
+        restaurantId: newIds
+      };
+    });
 
     this.users$.next(updatedUsers);
-  }
 
+    // 4. Zaktualizuj restaurantIdSubject w authService (reaktywne źródło danych)
+    const currentIds = this.authService.getRestaurantId() ?? [];
+    this.authService.setRestaurantIds([...currentIds, nextId]);
+    console.log('Nowe restaurantId użytkownika', this.authService.getRestaurantId());
+  }
   updateRestaurant(r: Restaurant) {
     this.restaurants$.next(this.restaurants$.value.map(x => x.id === r.id ? r : x));
   }

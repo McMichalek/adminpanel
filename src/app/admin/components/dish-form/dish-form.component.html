@@ -26,6 +26,12 @@
       Punkty:
       <input type="number" formControlName="points" />
     </label>
+    <label>
+      Restauracja:
+      <select formControlName="restaurant_id">
+        <option *ngFor="let r of restaurants" [value]="r.id">{{ r.name }}</option>
+      </select>
+    </label>
 
     <div class="button-group">
       <button type="submit" [disabled]="form.invalid" class="btn-primary">Zapisz</button>

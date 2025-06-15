@@ -9,6 +9,7 @@
     <thead>
       <tr>
         <th>ID</th>
+        <th>RestaurantID</th>
         <th>Nazwa</th>
         <th>Opis</th>
         <th>Składniki</th>
@@ -18,18 +19,32 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let d of (dishes$ | async)">
-        <td>{{ d.id }}</td>
-        <td>{{ d.name }}</td>
-        <td>{{ d.description }}</td>
-        <td>{{ d.ingredients }}</td>
-        <td>{{ d.price | currency:'PLN' }}</td>
-        <td>{{ d.points }}</td>
-        <td class="actions">
-          <button class="btn-edit" [routerLink]="['/admin/dishes', d.id, 'edit']">Edytuj</button>
-          <button class="btn-delete" (click)="delete(d.id)">Usuń</button>
-        </td>
-      </tr>
+    <tr *ngFor="let d of (dishes$ | async)">
+      <td>{{ d.id }}</td>
+      <td>{{ d.restaurant_id }}</td>
+      <td>{{ d.name }}</td>
+      <td>{{ d.description }}</td>
+      <td>{{ d.ingredients }}</td>
+      <td>
+    <span *ngIf="d.promoPrice !== null">
+      <span style="text-decoration: line-through; color: gray;">
+        {{ d.price | currency:'PLN' }}
+      </span>
+      <span style="color: red; font-weight: bold;">
+        {{ d.promoPrice | currency:'PLN' }}
+      </span>
+    </span>
+        <span *ngIf="d.promoPrice === null">
+      {{ d.price | currency:'PLN' }}
+    </span>
+      </td>
+      <td>{{ d.points }}</td>
+      <td class="actions">
+        <button class="btn-edit" [routerLink]="['/admin/dishes', d.id, 'edit']">Edytuj</button>
+        <button class="btn-delete" (click)="delete(d.id)">Usuń</button>
+      </td>
+    </tr>
+
     </tbody>
   </table>
 </div>

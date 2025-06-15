@@ -7,7 +7,9 @@ describe('Dish', () => {
       description: '',
       ingredients: '',
       price: 10,
-      points: 1
+      points: 1,
+      id: '',
+      restaurant_id: ''
     };
     expect(dish).toBeTruthy();
   });

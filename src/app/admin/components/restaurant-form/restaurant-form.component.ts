@@ -34,7 +34,7 @@ export class RestaurantFormComponent implements OnInit {
       name: ['', Validators.required],
       address: ['', Validators.required],
       city: ['', Validators.required],
-      opening_hours: ['', Validators.required],
+      openingHours: ['', Validators.required],
       special_offers: [[]]
     });
 

@@ -62,11 +62,13 @@
 
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+// @ts-ignore
+import { User } from 'src/app/models/user.model.ts';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private roleSubject = new BehaviorSubject<string | null>(null);
-  private restaurantIdSubject = new BehaviorSubject<string | null>(null);
+  restaurantIdSubject = new BehaviorSubject<string[] | null>(null);
   private userIdSubject = new BehaviorSubject<string | null>(null); // ⬅️ nowość
 
   role$ = this.roleSubject.asObservable();
@@ -76,21 +78,29 @@ export class AuthService {
   // tylko dla testów
   login(email: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (email === 'admin@test.com' && password === 'admin123') {
-        this.roleSubject.next('admin');
-        this.restaurantIdSubject.next('1');
-        this.userIdSubject.next('admin-1'); // ⬅️ fikcyjne ID użytkownika
-        resolve();
-      } else if (email === 'worker@test.com' && password === 'worker123') {
-        this.roleSubject.next('worker');
-        this.restaurantIdSubject.next('2');
-        this.userIdSubject.next('worker-1'); // ⬅️ fikcyjne ID użytkownika
+      const users = [
+        { email: 'admin1@test.com', password: 'admin123', role: 'admin', userId: 'admin-1', restaurantIds: ['1'] },
+        { email: 'admin2@test.com', password: 'admin123', role: 'admin', userId: 'admin-2', restaurantIds: ['2'] },
+        { email: 'admin3@test.com', password: 'admin123', role: 'admin', userId: 'admin-3', restaurantIds: ['3'] },
+
+        { email: 'worker1@test.com', password: 'worker123', role: 'worker', userId: 'worker-1', restaurantIds: ['1'] },
+        { email: 'worker2@test.com', password: 'worker123', role: 'worker', userId: 'worker-2', restaurantIds: ['2'] },
+        { email: 'worker3@test.com', password: 'worker123', role: 'worker', userId: 'worker-3', restaurantIds: ['3'] },
+      ];
+
+      const found = users.find(u => u.email === email && u.password === password);
+
+      if (found) {
+        this.roleSubject.next(found.role);
+        this.restaurantIdSubject.next(found.restaurantIds);
+        this.userIdSubject.next(found.userId);
         resolve();
       } else {
         reject(new Error('Niepoprawne dane logowania'));
       }
     });
   }
+
 
   logout(): Promise<void> {
     this.roleSubject.next(null);
@@ -103,12 +113,28 @@ export class AuthService {
     return this.roleSubject.value;
   }
 
-  getRestaurantId(): string | null {
+  getRestaurantId(): string[] | null {
     return this.restaurantIdSubject.value;
   }
 
   getUserId(): string | null {
     return this.userIdSubject.value;
+  }
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
+  setCurrentUser(user: User) {
+    this.currentUserSubject.next(user);
+  }
+  setRestaurantId(id: string | null) {
+    this.restaurantIdSubject.next(id ? [id] : null);
+  }
+
+  setRestaurantIds(ids: string[] | null) {
+    this.restaurantIdSubject.next(ids);
   }
 }
 

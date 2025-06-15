@@ -53,8 +53,8 @@ export class OrderFormComponent implements OnInit {
     });
     this.admin.getPromotions().subscribe(p => this.allPromotions = p);
 
-    this.form.get('restaurant_id')?.valueChanges.subscribe(() => {
-      this.filteredDishes = this.allDishes;
+    this.form.get('restaurant_id')?.valueChanges.subscribe(restaurantId => {
+      this.filteredDishes = this.allDishes.filter(d => d.restaurant_id === restaurantId);
       this.orderItems = {};
       this.updateTotalPrice();
     });
